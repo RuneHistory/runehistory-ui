@@ -5,7 +5,7 @@ BootstrapVue = require('bootstrap-vue');
 
 Vue.use(BootstrapVue);
 
-Vue.component('example', require('./components/Example.vue'));
+Vue.component('account-stats', require('./components/account/Stats.vue'));
 
 const app = new Vue({
     el: '#app'

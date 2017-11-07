@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     </head>
     <body>
-        <b-container id="app">
+        <b-container fluid id="app">
             @yield('content')
         </b-container>
         <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>

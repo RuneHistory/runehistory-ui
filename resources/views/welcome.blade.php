@@ -3,5 +3,5 @@
 @section('title', 'Welcome')
 
 @section('content')
-    <example></example>
+    <account-stats></account-stats>
 @endsection()
