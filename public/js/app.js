@@ -1630,26 +1630,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
-        href: {
-            type: String,
-            required: true
-        }
+        href: String,
+        required: true
     },
     computed: {
         isActive: function isActive() {
-            return this.href === this.$root.currentRoute;
-        }
-    },
-    methods: {
-        go: function go(event) {
-            event.preventDefault();
-            this.$root.currentRoute = this.href;
-            window.history.pushState(null, __WEBPACK_IMPORTED_MODULE_0__routes__["a" /* default */][this.href], this.href);
+            return this.href === window.location.pathname;
         }
     }
 });
@@ -1733,6 +1723,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         MainLayout: __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue___default.a
+    },
+    created: function created() {
+        console.log('created 404');
     }
 });
 
@@ -1757,6 +1750,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         MainLayout: __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue___default.a
+    },
+    created: function created() {
+        console.log('created about');
     }
 });
 
@@ -1781,6 +1777,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         MainLayout: __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue___default.a
+    },
+    created: function created() {
+        console.log('created home');
     }
 });
 
@@ -15446,7 +15445,7 @@ exports = module.exports = __webpack_require__("./node_modules/css-loader/lib/cs
 
 
 // module
-exports.push([module.i, "\n.active[data-v-2c0f8c2e] {\n    color: cornflowerblue;\n}\n", ""]);
+exports.push([module.i, "\n.active[data-v-2c0f8c2e] {\n    color: red;\n}\n", ""]);
 
 // exports
 
@@ -47566,11 +47565,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "a",
-    {
-      class: { active: _vm.isActive },
-      attrs: { href: _vm.href },
-      on: { click: _vm.go }
-    },
+    { class: { active: _vm.isActive }, attrs: { href: _vm.href } },
     [_vm._t("default")],
     2
   )

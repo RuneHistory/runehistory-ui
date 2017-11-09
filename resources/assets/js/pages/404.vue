@@ -9,6 +9,9 @@
     export default {
         components: {
             MainLayout
-        }
+        },
+        created: function () {
+            console.log('created 404');
+        },
     }
 </script>

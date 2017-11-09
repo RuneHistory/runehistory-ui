@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>@yield('title') - RuneHistory</title>
+        <title>@yield('title')RuneHistory</title>
 
         <link rel="stylesheet" href="{{ mix('/css/bootstrap.css') }}">
         <link rel="stylesheet" href="{{ mix('/css/bootstrap-vue.css') }}">

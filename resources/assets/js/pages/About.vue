@@ -10,6 +10,9 @@
     export default {
         components: {
             MainLayout
-        }
+        },
+        created: function () {
+            console.log('created about');
+        },
     }
 </script>
