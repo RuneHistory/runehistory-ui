@@ -1,21 +1,19 @@
 <template>
-    <b-row>
-        <b-col>
-            <div class="panel panel-default">
-                <div class="panel-heading">Example Component yessss</div>
-
-                <div class="panel-body">
-                    I'm an example component!!!!!!
-                </div>
-            </div>
-        </b-col>
-    </b-row>
+    <p>I should be showing stats for {{account}}</p>
 </template>
 
 <script>
+    import { getAccountHighscores } from '../../api'
+
     export default {
-        mounted() {
-            console.log('Stats component mounted')
+        created: function () {
+            console.log('created account stats component');
+        },
+        props: ['account'],
+        data: function () {
+            return {
+                highscores: getAccountHighscores(this.account)
+            }
         }
     }
 </script>

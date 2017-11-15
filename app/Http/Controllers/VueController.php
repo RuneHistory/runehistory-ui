@@ -14,4 +14,9 @@ class VueController
     {
         return view('vue_app');
     }
+
+    public function account()
+    {
+        return view('vue_app');
+    }
 }

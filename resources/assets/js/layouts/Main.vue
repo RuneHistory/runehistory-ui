@@ -3,6 +3,7 @@
         <ul>
             <li>
                 <v-link href="/">Home</v-link>
+                <v-link href="/account">Account</v-link>
                 <v-link href="/about">About</v-link>
             </li>
         </ul>
