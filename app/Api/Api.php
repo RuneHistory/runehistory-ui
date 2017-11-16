@@ -28,13 +28,24 @@ class Api
         return (string) $result->getBody();
     }
 
-    public function getHighScores($account, $days = 30)
+    /**
+     * @param $account
+     * @param int $days
+     * @param int $page
+     * @param null|Carbon $createdBefore
+     * @return string
+     */
+    public function getHighScores($account, $days = 30, $page, $createdBefore = null)
     {
-        $createdBefore = Carbon::now();
-        $createdAfter = Carbon::now()->subDays($days);
+        if (is_null($createdBefore)) {
+            $createdBefore = Carbon::now();
+        }
+        $createdAfter = clone $createdBefore;
+        $createdAfter->subDays($days);
         return $this->request('GET', "/v1/accounts/{$account}/highscores", [
             'createdBefore' => $createdBefore->toDateTimeString(),
             'createdAfter' => $createdAfter->toDateTimeString(),
+            'page' => $page,
         ]);
     }
 }

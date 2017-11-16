@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Api\Api;
+use Illuminate\Http\Request;
 
 class HighScoresController
 {
-    public function get($account, $days = 30)
+    public function get(Request $request, Api $api, $account, $days = 30)
     {
-        $api = new Api('http://api.runehistory.local');
-        $highscores = $api->getHighScores($account, $days);
+        $createdBefore = $request->get('createdBefore');
+        $page = $request->get('page', 1);
+        $highscores = $api->getHighScores($account, $days, $page, $createdBefore);
         return $highscores;
     }
 }
