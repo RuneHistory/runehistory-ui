@@ -1656,6 +1656,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 
@@ -1665,9 +1668,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     props: ['account'],
     data: function data() {
-        return {
-            highscores: Object(__WEBPACK_IMPORTED_MODULE_0__api__["a" /* getAccountHighscores */])(this.account)
+        var data = {
+            highscores: []
         };
+        Object(__WEBPACK_IMPORTED_MODULE_0__api__["a" /* getAccountHighscores */])(this.account).then(function (highscores) {
+            data.highscores = highscores;
+            console.log(data.highscores);
+        });
+        return data;
     }
 });
 
@@ -53261,8 +53269,10 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("p", [
-    _vm._v("I should be showing stats for " + _vm._s(_vm.account))
+  return _c("div", [
+    _c("p", [_vm._v("I should be showing stats for " + _vm._s(_vm.account))]),
+    _vm._v(" "),
+    _c("pre", [_vm._v(_vm._s(this.highscores))])
   ])
 }
 var staticRenderFns = []
@@ -64428,6 +64438,9 @@ module.exports = function(module) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bluebird__ = __webpack_require__("./node_modules/bluebird/js/browser/bluebird.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bluebird___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_bluebird__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__("./node_modules/lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
+
 
 
 
@@ -64452,19 +64465,17 @@ function getAccountHighscores(account) {
         if (lastPage <= currentPage) {
             return [];
         }
-        return _.range(currentPage + 1, lastPage + 1);
-    }).then(function (pages) {
-        return __WEBPACK_IMPORTED_MODULE_1_bluebird___default.a.map(pages, function (page) {
-            return getHighscoresPage(account, page);
-        }, { concurrency: 1 });
-    });
+        return __WEBPACK_IMPORTED_MODULE_2_lodash___default.a.range(currentPage + 1, lastPage + 1);
+    }).map(function (page) {
+        return getHighscoresPage(account, page);
+    }, { concurrency: 1 });
     return __WEBPACK_IMPORTED_MODULE_1_bluebird___default.a.all([firstPage, extraPages]).spread(function (first, extra) {
-        console.log(first);
-        console.log(extra);
         extra.unshift(first);
         return extra;
     }).map(function (page) {
         return page.data;
+    }).reduce(function (reduced, pages) {
+        return reduced.concat(pages);
     });
 }
 

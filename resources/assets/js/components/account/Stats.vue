@@ -1,5 +1,8 @@
 <template>
-    <p>I should be showing stats for {{account}}</p>
+    <div>
+        <p>I should be showing stats for {{account}}</p>
+        <pre>{{this.highscores}}</pre>
+    </div>
 </template>
 
 <script>
@@ -11,9 +14,14 @@
         },
         props: ['account'],
         data: function () {
-            return {
-                highscores: getAccountHighscores(this.account)
-            }
+            const data = {
+                highscores: []
+            };
+            getAccountHighscores(this.account).then(highscores => {
+                data.highscores = highscores;
+                console.log(data.highscores);
+            });
+            return data;
         }
     }
 </script>

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Promise from 'bluebird'
+import _ from 'lodash'
 
 function getHighscoresPage(account, page) {
     return axios.get('/api/account/' + account + '/highscores', {
@@ -23,17 +24,15 @@ export function getAccountHighscores(account) {
             return []
         }
         return _.range(currentPage + 1, lastPage + 1);
-    }).then(pages => {
-        return Promise.map(pages, page => {
-            return getHighscoresPage(account, page);
-        }, {concurrency: 1});
-    });
+    }).map(page => {
+        return getHighscoresPage(account, page);
+    }, {concurrency: 1});
     return Promise.all([firstPage, extraPages]).spread((first, extra) => {
-        console.log(first);
-        console.log(extra);
         extra.unshift(first);
         return extra;
     }).map(page => {
         return page.data
-    });
+    }).reduce((reduced, pages) => {
+        return reduced.concat(pages);
+    })
 }
