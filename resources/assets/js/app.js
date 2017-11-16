@@ -8,6 +8,7 @@ import routes from './routes'
 Vue.use(BootstrapVue);
 Vue.component('account-stats', require('./components/account/Stats.vue'));
 Vue.component('v-link', require('./components/VLink.vue'));
+Vue.component('line-chart', require('./components/charts/LineChart.vue'));
 
 const app = new Vue({
     el: '#app',
