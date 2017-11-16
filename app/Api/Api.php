@@ -25,7 +25,7 @@ class Api
         $result = $this->client->request($method, $uri, [
             'query' => $params,
         ]);
-        return (string) $result->getBody();
+        return json_decode((string) $result->getBody());
     }
 
     /**
