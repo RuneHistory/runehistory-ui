@@ -7,15 +7,20 @@ class VueController
 {
     public function home()
     {
-        return view('vue_app');
+        return $this->vueApp();
     }
 
     public function about()
     {
-        return view('vue_app');
+        return $this->vueApp();
     }
 
     public function account()
+    {
+        return $this->vueApp();
+    }
+
+    protected function vueApp()
     {
         return view('vue_app');
     }

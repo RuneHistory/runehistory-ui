@@ -58794,9 +58794,16 @@ module.exports = function(module) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = getAccountHighscores;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios__ = __webpack_require__("./node_modules/axios/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
+
+
 function getAccountHighscores(account) {
     console.log('Get highscores for ' + account);
-};
+    __WEBPACK_IMPORTED_MODULE_0_axios___default.a.get('/api/account/' + account + '/highscores').then(function (data) {
+        console.log(data.data); // Need to paginate this...
+    });
+}
 
 /***/ }),
 
