@@ -1,8 +1,7 @@
 <template>
     <div>
         <p>I should be showing stats for {{account}}</p>
-        <!--<pre>{{chartData}}</pre>-->
-        <line-chart :chart-data="chartData" :options="options"></line-chart>
+        <line-chart chart-id="account-stats" :data="chartData" :options="options"></line-chart>
     </div>
 </template>
 
@@ -13,35 +12,38 @@
         props: ['account'],
         data: function () {
             const data = {
-                options: {responsive: true, maintainAspectRatio: false},
+                options: {
+                    spanGaps: true,
+                    elements: {
+                        line: {
+                            tension: 0, // disables bezier curves
+                            fill: false
+                        }
+                    },
+                    scales: {
+                        xAxes: [{
+                            type: 'time',
+                            distribution: 'linear'
+                        }]
+                    }
+                },
                 chartData: {
-                    labels: [],
                     datasets: []
                 },
-                testData: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            };
+            getAccountHighscores(this.account).map(highscore => {
+                return {
+                    x: highscore.created_at,
+                    y: highscore.skills.overall.experience
+                };
+            }).then(highscores => {
+                data.chartData = {
                     datasets: [
                         {
-                            label: 'GitHub Commits',
-                            backgroundColor: '#f87979',
-                            data: [40, 20, 12, 39, 10, 40, 39, 80, 40, 20, 12, 11]
+                            label: 'Overall',
+                            data: highscores
                         }
                     ]
-                }
-            };
-            let labels = [];
-            const label = 'Overall XP';
-            getAccountHighscores(this.account).map(highscore => {
-                labels.push(highscore.created_at);
-                return highscore.skills.overall.experience;
-            }).then(experience => {
-                data.chartData = {
-                    labels: labels,
-                    datasets: [{
-                        label: label,
-                        backgroundColor: '#f87979',
-                        data: experience
-                    }]
                 };
             });
             return data;

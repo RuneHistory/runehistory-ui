@@ -22,7 +22,6 @@
         "bluebird": "^3.5.1",
         "bootstrap-vue": "^1.0.2",
         "chart.js": "^2.7.1",
-        "page": "^1.7.1",
-        "vue-chartjs": "^3.0.2"
+        "page": "^1.7.1"
     }
 }

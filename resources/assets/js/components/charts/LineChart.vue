@@ -1,12 +1,34 @@
+<template>
+    <canvas :id="chartId"></canvas>
+</template>
+
 <script>
-    import { Line, mixins } from 'vue-chartjs'
+    import Chart from 'chart.js'
 
     export default {
-        extends: Line,
-        mixins: [mixins.reactiveProp],
-        props: ['chartData', 'options'],
-        mounted () {
-            this.renderChart(this.chartData, this.options)
+        props: ['data', 'options', 'chartId'],
+        mounted: function () {
+            this.renderChart(this.data, this.options);
+        },
+        watch: {
+            data: function () {
+                this.renderChart(this.data, this.options);
+            }
+        },
+        data: function() {
+            return {
+                chart: null
+            }
+        },
+        methods: {
+            renderChart: function (data, options) {
+                const ctx = document.getElementById(this.chartId);
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: data,
+                    options: options
+                });
+            }
         }
     }
 </script>
