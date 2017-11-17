@@ -16,7 +16,7 @@
                     spanGaps: true,
                     elements: {
                         line: {
-                            tension: 0, // disables bezier curves
+                            tension: 0,
                             fill: false
                         }
                     },

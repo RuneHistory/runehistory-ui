@@ -1670,7 +1670,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 spanGaps: true,
                 elements: {
                     line: {
-                        tension: 0, // disables bezier curves
+                        tension: 0,
                         fill: false
                     }
                 },
