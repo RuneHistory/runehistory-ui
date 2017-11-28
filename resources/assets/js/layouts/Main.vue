@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <b-container fluid>
         <ul>
             <li>
                 <v-link href="/">Home</v-link>
@@ -9,7 +9,7 @@
         </ul>
 
         <slot></slot>
-    </div>
+    </b-container>
 </template>
 
 <script>

@@ -12,7 +12,8 @@ class HighScoresController
     {
         $createdBefore = $request->get('createdBefore');
         $page = $request->get('page', 1);
-        $highscores = $api->getHighScores($account, $days, $page, $createdBefore);
+        $skills = $request->get('skills');
+        $highscores = $api->getHighScores($account, $days, $page, $skills, $createdBefore);
         return response()->json($highscores);
     }
 }

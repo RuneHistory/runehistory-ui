@@ -1,21 +1,25 @@
 import axios from 'axios'
 import Promise from 'bluebird'
 import _ from 'lodash'
+import SKILLS from './skills'
 
-function getHighscoresPage(account, page) {
+const defaultSkills = Object.keys(SKILLS);
+
+function getHighscoresPage(account, page, skills) {
     return axios.get('/api/account/' + account + '/highscores', {
         params: {
-            page: page
+            page,
+            skills
         }
     }).then(function (data) {
         return data.data;
     });
 }
 
-export function getAccountHighscores(account) {
+export function getAccountHighscores(account, skills = defaultSkills) {
     console.log('Get highscores for ' + account);
     const firstPage = Promise.try(() => {
-        return getHighscoresPage(account, 1);
+        return getHighscoresPage(account, 1, skills);
     });
     const extraPages = firstPage.then(data => {
         const currentPage = data.meta.current_page;
@@ -25,7 +29,7 @@ export function getAccountHighscores(account) {
         }
         return _.range(currentPage + 1, lastPage + 1);
     }).map(page => {
-        return getHighscoresPage(account, page);
+        return getHighscoresPage(account, page, skills);
     }, {concurrency: 1});
     return Promise.all([firstPage, extraPages]).spread((first, extra) => {
         extra.unshift(first);

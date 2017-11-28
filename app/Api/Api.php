@@ -32,10 +32,11 @@ class Api
      * @param $account
      * @param int $days
      * @param int $page
+     * @param null|string[] $skills
      * @param null|Carbon $createdBefore
      * @return string
      */
-    public function getHighScores($account, $days = 30, $page, $createdBefore = null)
+    public function getHighScores($account, $days = 30, $page, $skills = null, $createdBefore = null)
     {
         if (is_null($createdBefore)) {
             $createdBefore = Carbon::now();
@@ -46,6 +47,7 @@ class Api
             'createdBefore' => $createdBefore->toDateTimeString(),
             'createdAfter' => $createdAfter->toDateTimeString(),
             'page' => $page,
+            'skills' => $skills,
         ]);
     }
 }
