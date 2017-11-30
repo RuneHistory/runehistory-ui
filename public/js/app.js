@@ -1646,6 +1646,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         var data = {
+            loading: false,
             options: {
                 spanGaps: true,
                 elements: {
@@ -1676,37 +1677,54 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 datasets: []
             }
         };
-        Object(__WEBPACK_IMPORTED_MODULE_0__api__["a" /* getAccountHighscores */])(this.account, this.skills).reduce(function (reduced, item) {
-            var skillsInItem = Object.keys(item.skills);
-            skillsInItem.forEach(function (skill) {
-                if (!reduced.hasOwnProperty(skill)) {
-                    reduced[skill] = [];
-                }
-                reduced[skill].push({
-                    t: item.created_at,
-                    y: item.skills[skill].experience
-                });
-            });
-            return reduced;
-        }, {}).then(function (highscores) {
-            var datasets = [];
-            Object.keys(highscores).forEach(function (skill) {
-                var name = __WEBPACK_IMPORTED_MODULE_1__skills__["a" /* default */][skill].name;
-                var color = __WEBPACK_IMPORTED_MODULE_1__skills__["a" /* default */][skill].color;
-                datasets.push({
-                    label: name,
-                    data: highscores[skill],
-                    borderColor: color,
-                    backgroundColor: color
-                });
-            });
-            return datasets;
-        }).then(function (datasets) {
-            data.chartData = {
-                datasets: datasets
-            };
-        });
         return data;
+    },
+    watch: {
+        account: function account() {
+            this.populateChartData();
+        }
+    },
+    methods: {
+        populateChartData: function populateChartData() {
+            var _this = this;
+
+            this.loading = true;
+            Object(__WEBPACK_IMPORTED_MODULE_0__api__["a" /* getAccountHighscores */])(this.account, this.skills).reduce(function (reduced, item) {
+                var skillsInItem = Object.keys(item.skills);
+                skillsInItem.forEach(function (skill) {
+                    if (!reduced.hasOwnProperty(skill)) {
+                        reduced[skill] = [];
+                    }
+                    reduced[skill].push({
+                        t: item.created_at,
+                        y: item.skills[skill].experience
+                    });
+                });
+                return reduced;
+            }, {}).then(function (highscores) {
+                var datasets = [];
+                Object.keys(highscores).forEach(function (skill) {
+                    var name = __WEBPACK_IMPORTED_MODULE_1__skills__["a" /* default */][skill].name;
+                    var color = __WEBPACK_IMPORTED_MODULE_1__skills__["a" /* default */][skill].color;
+                    datasets.push({
+                        label: name,
+                        data: highscores[skill],
+                        borderColor: color,
+                        backgroundColor: color
+                    });
+                });
+                return datasets;
+            }).then(function (datasets) {
+                console.log('updating now...');
+                _this.chartData = {
+                    datasets: datasets
+                };
+                _this.loading = false;
+            });
+        }
+    },
+    mounted: function mounted() {
+        this.populateChartData();
     }
 });
 
@@ -1728,11 +1746,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['data', 'options', 'chartId'],
-    mounted: function mounted() {
-        this.renderChart(this.data, this.options);
-    },
     watch: {
         data: function data() {
+            if (this.chart) {
+                this.chart.destroy();
+            }
             this.renderChart(this.data, this.options);
         }
     },
@@ -1743,6 +1761,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     methods: {
         renderChart: function renderChart(data, options) {
+            console.log('rendering chart', data);
             var ctx = document.getElementById(this.chartId);
             this.chart = new __WEBPACK_IMPORTED_MODULE_0_chart_js___default.a(ctx, {
                 type: 'line',
@@ -1816,6 +1835,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue__ = __webpack_require__("./resources/assets/js/layouts/Main.vue");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue__);
+//
+//
 //
 //
 //
@@ -98808,6 +98829,14 @@ var render = function() {
       _c("p", [_vm._v("I should be showing stats for " + _vm._s(_vm.account))]),
       _vm._v(" "),
       _c("line-chart", {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: !_vm.loading,
+            expression: "!loading"
+          }
+        ],
         attrs: {
           "chart-id": "account-stats",
           data: _vm.chartData,
@@ -98914,6 +98943,24 @@ var render = function() {
         [
           _c("b-col", [
             _c("div", { staticClass: "panel panel-default" }, [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model.lazy",
+                    value: _vm.account,
+                    expression: "account",
+                    modifiers: { lazy: true }
+                  }
+                ],
+                domProps: { value: _vm.account },
+                on: {
+                  change: function($event) {
+                    _vm.account = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
               _c("div", { staticClass: "panel-heading" }, [
                 _vm._v("Stats for: " + _vm._s(_vm.account))
               ]),

@@ -3,6 +3,8 @@
         <b-row>
             <b-col>
                 <div class="panel panel-default">
+                    <input v-model.lazy="account" >
+
                     <div class="panel-heading">Stats for: {{account}}</div>
 
                     <div class="panel-body">

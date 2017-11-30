@@ -7,13 +7,13 @@
 
     export default {
         props: ['data', 'options', 'chartId'],
-        mounted: function () {
-            this.renderChart(this.data, this.options);
-        },
         watch: {
             data: function () {
+                if (this.chart) {
+                    this.chart.destroy();
+                }
                 this.renderChart(this.data, this.options);
-            }
+            },
         },
         data: function() {
             return {
@@ -22,6 +22,7 @@
         },
         methods: {
             renderChart: function (data, options) {
+                console.log('rendering chart', data);
                 const ctx = document.getElementById(this.chartId);
                 this.chart = new Chart(ctx, {
                     type: 'line',

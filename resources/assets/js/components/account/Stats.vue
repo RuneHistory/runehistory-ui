@@ -1,7 +1,7 @@
 <template>
     <div>
         <p>I should be showing stats for {{account}}</p>
-        <line-chart chart-id="account-stats" :data="chartData" :options="options"></line-chart>
+        <line-chart v-show="!loading" chart-id="account-stats" :data="chartData" :options="options"></line-chart>
     </div>
 </template>
 
@@ -19,7 +19,8 @@
             }
         },
         data: function () {
-            const data = {
+            let data = {
+                loading: false,
                 options: {
                     spanGaps: true,
                     elements: {
@@ -50,37 +51,52 @@
                     datasets: []
                 },
             };
-            getAccountHighscores(this.account, this.skills).reduce((reduced, item) => {
-                const skillsInItem = Object.keys(item.skills);
-                skillsInItem.forEach(skill => {
-                    if (!reduced.hasOwnProperty(skill)) {
-                        reduced[skill] = [];
-                    }
-                    reduced[skill].push({
-                        t: item.created_at,
-                        y: item.skills[skill].experience
-                    })
-                });
-                return reduced;
-            }, {}).then(highscores => {
-                let datasets = [];
-                Object.keys(highscores).forEach(skill => {
-                    const name = skills[skill].name;
-                    const color = skills[skill].color;
-                    datasets.push({
-                        label: name,
-                        data: highscores[skill],
-                        borderColor: color,
-                        backgroundColor: color,
-                    })
-                });
-                return datasets;
-            }).then(datasets => {
-                data.chartData = {
-                    datasets
-                };
-            });
             return data;
+        },
+        watch: {
+            account: function () {
+                this.populateChartData();
+            }
+        },
+        methods: {
+            populateChartData: function () {
+                this.loading = true;
+                getAccountHighscores(this.account, this.skills).reduce((reduced, item) => {
+                    const skillsInItem = Object.keys(item.skills);
+                    skillsInItem.forEach(skill => {
+                        if (!reduced.hasOwnProperty(skill)) {
+                            reduced[skill] = [];
+                        }
+                        reduced[skill].push({
+                            t: item.created_at,
+                            y: item.skills[skill].experience
+                        })
+                    });
+                    return reduced;
+                }, {}).then(highscores => {
+                    let datasets = [];
+                    Object.keys(highscores).forEach(skill => {
+                        const name = skills[skill].name;
+                        const color = skills[skill].color;
+                        datasets.push({
+                            label: name,
+                            data: highscores[skill],
+                            borderColor: color,
+                            backgroundColor: color,
+                        })
+                    });
+                    return datasets;
+                }).then(datasets => {
+                    console.log('updating now...');
+                    this.chartData = {
+                        datasets
+                    };
+                    this.loading = false;
+                });
+            }
+        },
+        mounted: function() {
+            this.populateChartData();
         }
     }
 </script>
