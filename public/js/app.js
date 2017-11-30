@@ -1835,7 +1835,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            account: 'baino'
+            account: this.$route.query.account || 'baino'
         };
     },
     created: function created() {

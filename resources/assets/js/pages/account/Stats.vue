@@ -23,7 +23,7 @@
         },
         data: function () {
             return {
-                account: 'baino'
+                account: this.$route.query.account || 'baino'
             }
         },
         created: function () {
