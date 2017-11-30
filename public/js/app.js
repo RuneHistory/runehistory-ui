@@ -1657,7 +1657,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 scales: {
                     xAxes: [{
                         type: 'time',
-                        distribution: 'linear'
+                        distribution: 'linear',
+                        time: {
+                            unit: 'day',
+                            displayFormats: {
+                                day: "YYYY-MM-DD"
+                            }
+                        }
                     }]
                 },
                 time: {

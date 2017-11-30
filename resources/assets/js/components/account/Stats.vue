@@ -31,7 +31,13 @@
                     scales: {
                         xAxes: [{
                             type: 'time',
-                            distribution: 'linear'
+                            distribution: 'linear',
+                            time: {
+                                unit: 'day',
+                                displayFormats: {
+                                    day: "YYYY-MM-DD",
+                                },
+                            }
                         }]
                     },
                     time: {
