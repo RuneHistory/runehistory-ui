@@ -15,7 +15,7 @@
             account: String,
             skills: {
                 type: Array,
-                default: null
+                default: undefined
             }
         },
         data: function () {

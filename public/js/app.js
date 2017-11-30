@@ -1641,7 +1641,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         account: String,
         skills: {
             type: Array,
-            default: null
+            default: undefined
         }
     },
     data: function data() {
@@ -1834,8 +1834,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         MainLayout: __WEBPACK_IMPORTED_MODULE_0__layouts_Main_vue___default.a
     },
     data: function data() {
+        var skills = this.$route.query.skills;
         return {
-            account: this.$route.query.account || 'baino'
+            account: this.$route.query.account || 'baino',
+            skills: skills ? skills.split(',') : undefined
         };
     },
     created: function created() {
@@ -98913,7 +98915,11 @@ var render = function() {
               _c(
                 "div",
                 { staticClass: "panel-body" },
-                [_c("account-stats", { attrs: { account: _vm.account } })],
+                [
+                  _c("account-stats", {
+                    attrs: { account: _vm.account, skills: _vm.skills }
+                  })
+                ],
                 1
               )
             ])
@@ -112324,7 +112330,7 @@ function getHighscoresPage(account, page, skills) {
 function getAccountHighscores(account) {
     var skills = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultSkills;
 
-    console.log('Get highscores for ' + account);
+    console.log('Get highscores for ' + account + '. Skills:', skills);
     var firstPage = __WEBPACK_IMPORTED_MODULE_1_bluebird___default.a.try(function () {
         return getHighscoresPage(account, 1, skills);
     });

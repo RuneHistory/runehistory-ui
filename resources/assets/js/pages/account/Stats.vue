@@ -6,7 +6,7 @@
                     <div class="panel-heading">Stats for: {{account}}</div>
 
                     <div class="panel-body">
-                        <account-stats :account="account"></account-stats>
+                        <account-stats :account="account" :skills="skills"></account-stats>
                     </div>
                 </div>
             </b-col>
@@ -22,8 +22,10 @@
             MainLayout
         },
         data: function () {
+            const skills = this.$route.query.skills;
             return {
-                account: this.$route.query.account || 'baino'
+                account: this.$route.query.account || 'baino',
+                skills: skills ? skills.split(',') : undefined,
             }
         },
         created: function () {

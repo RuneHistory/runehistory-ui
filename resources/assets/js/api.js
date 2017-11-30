@@ -17,7 +17,7 @@ function getHighscoresPage(account, page, skills) {
 }
 
 export function getAccountHighscores(account, skills = defaultSkills) {
-    console.log('Get highscores for ' + account);
+    console.log('Get highscores for ' + account + '. Skills:', skills);
     const firstPage = Promise.try(() => {
         return getHighscoresPage(account, 1, skills);
     });
