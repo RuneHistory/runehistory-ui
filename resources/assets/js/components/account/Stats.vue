@@ -1,6 +1,5 @@
 <template>
     <div>
-        <p>I should be showing stats for {{account}}</p>
         <line-chart v-show="!loading" chart-id="account-stats" :data="chartData" :options="options"></line-chart>
     </div>
 </template>
@@ -29,6 +28,9 @@
                             fill: false
                         }
                     },
+                    legend: {
+                        display: false
+                    },
                     scales: {
                         xAxes: [{
                             type: 'time',
@@ -55,6 +57,9 @@
         },
         watch: {
             account: function () {
+                this.populateChartData();
+            },
+            skills: function () {
                 this.populateChartData();
             }
         },
@@ -87,7 +92,6 @@
                     });
                     return datasets;
                 }).then(datasets => {
-                    console.log('updating now...');
                     this.chartData = {
                         datasets
                     };
