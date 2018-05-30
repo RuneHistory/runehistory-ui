@@ -45,7 +45,6 @@ export default {
   data() {
     return {
       drawer: true,
-      fixed: false,
       navigation: [{
         icon: 'bubble_chart',
         title: 'Dashboard',
