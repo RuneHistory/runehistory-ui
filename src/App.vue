@@ -12,6 +12,8 @@
           value="true"
           v-for="(item, i) in navigation"
           :key="i"
+          :to="item.link"
+          ripple
         >
           <v-list-tile-action>
             <v-icon v-html="item.icon"></v-icon>
@@ -41,17 +43,23 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      drawer: true,
-      navigation: [{
-        icon: 'bubble_chart',
-        title: 'Dashboard',
-      }],
-      title: 'RuneHistory',
-    };
-  },
-  name: 'App',
-};
+  export default {
+    data() {
+      return {
+        drawer: true,
+        navigation: [{
+          icon: 'bubble_chart',
+          title: 'Hello World',
+          link: { name: 'HelloWorld' },
+        },
+        {
+          icon: 'bubble_chart',
+          title: 'Dashboard',
+          link: { name: 'dashboard' },
+        }],
+        title: 'RuneHistory',
+      };
+    },
+    name: 'App',
+  };
 </script>
