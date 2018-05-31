@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import HelloWorld from '../components/HelloWorld';
+import TrackXp from '../components/TrackXp';
 import Dashboard from '../components/Dashboard';
+import LandingPage from '../components/LandingPage';
 
 Vue.use(Router);
 
@@ -9,13 +10,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld,
+      name: 'landing',
+      component: LandingPage,
     },
     {
-      path: '/dashboard',
+      path: '/router',
       name: 'dashboard',
       component: Dashboard,
+    },
+    {
+      path: '/track',
+      name: 'track',
+      component: TrackXp,
     },
   ],
 });

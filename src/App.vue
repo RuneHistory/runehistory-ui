@@ -48,14 +48,14 @@
       return {
         drawer: true,
         navigation: [{
-          icon: 'bubble_chart',
-          title: 'Hello World',
-          link: { name: 'HelloWorld' },
-        },
-        {
-          icon: 'bubble_chart',
+          icon: 'dashboard',
           title: 'Dashboard',
           link: { name: 'dashboard' },
+        },
+        {
+          icon: 'show_chart',
+          title: 'Track XP',
+          link: { name: 'track' },
         }],
         title: 'RuneHistory',
       };
