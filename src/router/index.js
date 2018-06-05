@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import TrackXp from '../components/TrackXp';
+import Search from '../components/track/Search';
 import Dashboard from '../components/Dashboard';
 
 Vue.use(Router);
@@ -19,7 +19,7 @@ export default new Router({
     {
       path: '/track',
       name: 'track',
-      component: TrackXp,
+      component: Search,
     },
   ],
 });
