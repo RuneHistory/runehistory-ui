@@ -55,7 +55,7 @@
         {
           icon: 'show_chart',
           title: 'Track XP',
-          link: { name: 'track' },
+          link: { name: 'search' },
         }],
         title: 'RuneHistory',
       };

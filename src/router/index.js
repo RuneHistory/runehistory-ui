@@ -18,7 +18,7 @@ export default new Router({
     },
     {
       path: '/track',
-      name: 'track',
+      name: 'search',
       component: Search,
     },
   ],
