@@ -7,7 +7,7 @@
             <v-toolbar-title>Track User</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <v-form ref="form" v-model="valid" xs12>
+          <v-form ref="form" v-model="valid" @submit="submit" xs12>
             <v-container>
               <v-layout>
                 <v-flex xs12>
@@ -21,7 +21,7 @@
 
                   <v-btn
                     :disabled="!valid"
-                    @click="submit"
+                    type="submit"
                   >
                     Track
                   </v-btn>
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+  import util from '../../util';
+
   export default {
     data: () => ({
       valid: true,
@@ -47,10 +49,16 @@
       ],
     }),
 
+    computed: {
+      slug() {
+        return util.slugify(this.username);
+      },
+    },
+
     methods: {
       submit() {
         if (this.$refs.form.validate()) {
-          // Valid form
+          this.$router.push({ name: 'track', params: { slug: this.slug } });
         }
       },
       clear() {
