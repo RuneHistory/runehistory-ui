@@ -61,7 +61,7 @@
                     <div>RuneHistory is open source. Can you think of features that you would like to see?</div>
                   </v-card-title>
                   <v-card-actions>
-                    <v-btn flat dark href="https://github.com/jmwri/runehistory-ui">Start contributing</v-btn>
+                    <v-btn flat dark href="https://github.com/runehistory">Start contributing</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-flex>
