@@ -5,7 +5,7 @@
       <v-flex xs12 v-if="!account">
         <v-card>
           <v-toolbar color="primary" dark>
-            <v-toolbar-title>Loading account</v-toolbar-title>
+            <v-toolbar-title>Loading Account</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-container fluid>
