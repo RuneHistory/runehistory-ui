@@ -23,9 +23,9 @@
           <v-container fluid>
             <v-layout>
               <v-flex xs12>
-                RuneHistory is an XP tracker for <a href="http://oldschool.runescape.com">Old School RuneScape</a>. Unlike
-                other XP trackers RuneHistory will track your XP frequently without any interaction needed so your data will
-                stay up-to-date.
+                RuneHistory is an XP tracker for <a href="http://oldschool.runescape.com">Old School RuneScape</a>.
+                Unlike other XP trackers RuneHistory will track your XP frequently without any interaction needed so
+                your data will stay up-to-date.
               </v-flex>
             </v-layout>
           </v-container>

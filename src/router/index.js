@@ -1,10 +1,10 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Search from '../components/track/Search';
-import Track from '../components/track/Track';
-import Dashboard from '../components/Dashboard';
+import Vue from 'vue'
+import Router from 'vue-router'
+import Search from '../components/track/Search'
+import Track from '../components/track/Track'
+import Dashboard from '../components/Dashboard'
 
-Vue.use(Router);
+Vue.use(Router)
 
 export default new Router({
   routes: [
@@ -29,4 +29,4 @@ export default new Router({
       props: true,
     },
   ],
-});
+})

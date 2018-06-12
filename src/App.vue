@@ -58,8 +58,8 @@
           link: { name: 'search' },
         }],
         title: 'RuneHistory',
-      };
+      }
     },
     name: 'App',
-  };
+  }
 </script>
