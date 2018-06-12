@@ -37,11 +37,18 @@
 </template>
 
 <script>
-  import { slugify } from '../../util';
+  import { slugify } from '../../util'
+
+  const Client = require('runehistoryjs')
 
   export default {
+    created() {
+      this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
+    },
     data: () => ({
       valid: true,
+      submitted: false,
+      exists: true,
       username: '',
       usernameRules: [
         v => !!v || 'Username is required',
@@ -51,19 +58,37 @@
 
     computed: {
       slug() {
-        return slugify(this.username);
+        return slugify(this.username)
       },
     },
 
     methods: {
       submit() {
         if (this.$refs.form.validate()) {
-          this.$router.push({ name: 'track', params: { slug: this.slug } });
+          this.getAccount().then((account) => {
+            if (!account) {
+              return this.createAccount()
+            }
+            return account
+          }).then(() => {
+            this.$router.push({ name: 'track', params: { slug: this.slug } })
+          })
         }
       },
       clear() {
-        this.$refs.form.reset();
+        this.$refs.form.reset()
+      },
+      getAccount() {
+        return this.rh.accounts().getAccount(this.slug).catch((err) => {
+          if (err.response.status === 404) {
+            return null
+          }
+          throw err
+        })
+      },
+      createAccount() {
+        return this.rh.accounts().createAccount(this.username)
       },
     },
-  };
+  }
 </script>
