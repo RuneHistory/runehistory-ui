@@ -12,7 +12,7 @@
                 <h3 class="display-3">RuneHistory</h3>
                 <span class="subheading">Old School RuneScape XP tracker</span>
                 <v-divider class="my-3"></v-divider>
-                <div class="title mb-3">Check out our newest features!</div>
+                <div class="title mb-3">Join 999 other players and start tracking your account today!</div>
                 <v-btn large color="primary" class="mx-0" :to="{ name: 'search' }">Get started</v-btn>
               </v-flex>
             </v-layout>
