@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import util from '../../util';
+  import { slugify } from '../../util';
 
   export default {
     data: () => ({
@@ -51,7 +51,7 @@
 
     computed: {
       slug() {
-        return util.slugify(this.username);
+        return slugify(this.username);
       },
     },
 
