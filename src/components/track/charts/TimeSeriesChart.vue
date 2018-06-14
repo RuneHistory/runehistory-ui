@@ -32,6 +32,11 @@
           legend: {
             display: this.legend,
           },
+          elements: {
+            line: {
+              tension: 0,
+            },
+          },
           responsive: true,
           maintainAspectRatio: false,
           title: {
@@ -58,9 +63,6 @@
               scaleLabel: {
                 display: true,
                 labelString: 'XP',
-              },
-              ticks: {
-                beginAtZero: true,
               },
             }],
           },
