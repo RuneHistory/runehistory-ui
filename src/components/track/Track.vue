@@ -28,8 +28,10 @@
             <v-layout v-if="account">
               <v-flex xs12>
                 <p>
-                  We started tracking {{ account.nickname }} at {{ account.created_at }}, and the most recent run was at
-                  {{ account.last_run_at || '[never]' }}. {{ account.nickname }} hasn't been updated for {{
+                  We started tracking {{ account.nickname }} at {{ account.created_at }}, and the
+                  most recent run was at
+                  {{ account.last_run_at || '[never]' }}. {{ account.nickname }} hasn't been updated
+                  for {{
                   account.runs_unchanged }}
                   runs.
                 </p>
@@ -42,38 +44,127 @@
         </v-card>
       </v-flex>
 
+      <v-flex xs12>
+        <v-card>
+          <v-toolbar color="primary" dark>
+            <v-toolbar-title>{{ UCFirst(skill) }} XP</v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-container fluid>
+            <v-layout wrap>
+              <v-flex xs12>
+                <v-select
+                  :items="skillsSelect"
+                  v-model="skill"
+                  label="Skill"
+                  single-line
+                ></v-select>
+              </v-flex>
+
+              <v-flex xs12 v-if="!skillChartData">
+                <v-progress-linear :indeterminate="true"></v-progress-linear>
+              </v-flex>
+
+              <v-flex xs12 v-if="skillChartData">
+                <time-series-chart :chart-data="skillChartData"></time-series-chart>
+              </v-flex>
+
+            </v-layout>
+
+          </v-container>
+        </v-card>
+      </v-flex>
+
     </v-layout>
   </v-container>
 </template>
 
 <script>
-  const Client = require('runehistoryjs')
+  import moment from 'moment'
+  import Client from 'runehistoryjs'
+  import LineChart from './charts/LineChart'
+  import TimeSeriesChart from './charts/TimeSeriesChart'
 
   export default {
     created() {
       this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
-    },
-    mounted() {
       this.loadAccount(this.slug)
     },
     data() {
       return {
         account: null,
+        highScores: null,
+        skills: ['overall', 'attack', 'defence', 'strength', 'hitpoints',
+          'ranged', 'prayer', 'magic', 'cooking', 'woodcutting',
+          'fletching', 'fishing', 'firemaking', 'crafting', 'smithing',
+          'mining', 'herblore', 'agility', 'theiving', 'slayer',
+          'farming', 'hunter'],
+        skill: 'overall',
       }
     },
     computed: {
       slug() {
         return this.$route.params.slug
       },
+      skillsSelect() {
+        return this.skills.map(skill => ({
+          text: this.UCFirst(skill),
+          value: skill,
+        }))
+      },
+      skillChartData() {
+        const dataPoints = []
+
+        if (!this.highScores) {
+          return null
+        }
+
+        this.highScores.forEach((record) => {
+          Object.keys(record.skills).forEach((skill) => {
+            if (skill !== this.skill) {
+              return
+            }
+            dataPoints.push({
+              x: moment(record.created_at).toDate(),
+              y: record.skills[skill].experience,
+            })
+          })
+        })
+
+        return {
+          datasets: [{
+            label: this.UCFirst(this.skill),
+            backgroundColor: '#889df8',
+            borderColor: '#889df8',
+            fill: false,
+            data: dataPoints,
+          }],
+        }
+      },
     },
     watch: {
-      slug() {
-        this.loadAccount()
+      slug(slug) {
+        if (!slug) {
+          return
+        }
+        this.loadAccount(slug)
+      },
+      account(account) {
+        if (!account) {
+          return
+        }
+        this.loadHighScores(account.slug, this.skill)
+      },
+      skill(skill) {
+        if (!this.account) {
+          return
+        }
+        this.loadHighScores(this.account.slug, skill)
       },
     },
     methods: {
-      loadAccount() {
-        return this.rh.accounts().getAccount(this.slug)
+      loadAccount(slug) {
+        return this.rh.accounts().getAccount(slug)
           .then((account) => {
             this.account = account
             return account
@@ -83,6 +174,27 @@
             throw err
           })
       },
+      loadHighScores(slug, skill) {
+        return this.rh.accounts().highScores(slug).getHighScores(null, null, [skill])
+          .then((highScores) => {
+            this.highScores = highScores
+            return highScores
+          })
+          .catch((err) => {
+            this.highScores = null
+            throw err
+          })
+      },
+      /**
+       * @return {string}
+       */
+      UCFirst(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1)
+      },
+    },
+    components: {
+      TimeSeriesChart,
+      LineChart,
     },
   }
 </script>

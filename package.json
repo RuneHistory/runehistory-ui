@@ -13,9 +13,12 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "runehistoryjs": "0.0.1",
+    "chart.js": "^2.7.2",
+    "moment": "^2.22.2",
+    "runehistoryjs": "0.0.2",
     "slugify": "^1.3.0",
     "vue": "^2.5.2",
+    "vue-chartjs": "^3.3.1",
     "vue-router": "^3.0.1",
     "vuetify": "^1.0.0"
   },
