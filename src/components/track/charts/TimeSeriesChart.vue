@@ -29,6 +29,7 @@
     data() {
       return {
         options: {
+          animation: false,
           legend: {
             display: this.legend,
           },

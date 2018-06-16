@@ -52,13 +52,20 @@
           </v-toolbar>
           <v-container fluid>
             <v-layout wrap>
-              <v-flex xs12>
+              <v-flex xs12 sm6>
                 <v-select
                   :items="skillsSelect"
                   v-model="skill"
                   label="Skill"
                   single-line
                 ></v-select>
+              </v-flex>
+
+              <v-flex xs12 sm6>
+                <v-checkbox
+                  label="Optimise"
+                  v-model="optimiseDataPoints"
+                ></v-checkbox>
               </v-flex>
 
               <v-flex xs12 v-if="!skillChartData">
@@ -100,6 +107,7 @@
           'mining', 'herblore', 'agility', 'theiving', 'slayer',
           'farming', 'hunter'],
         skill: 'overall',
+        optimiseDataPoints: true,
       }
     },
     computed: {
@@ -119,11 +127,33 @@
           return null
         }
 
-        this.highScores.forEach((record) => {
+        this.highScores.forEach((record, i) => {
+          let previousRecord = null
+          let nextRecord = null
+
+          if (i > 0) {
+            previousRecord = this.highScores[i - 1]
+          }
+          if (i < this.highScores.length - 1) {
+            nextRecord = this.highScores[i + 1]
+          }
           Object.keys(record.skills).forEach((skill) => {
+            const xp = record.skills[skill].experience
+            let previousXp = null
+            let nextXp = null
             if (skill !== this.skill) {
               return
             }
+            if (previousRecord) {
+              previousXp = previousRecord.skills[skill].experience
+            }
+            if (nextRecord) {
+              nextXp = nextRecord.skills[skill].experience
+            }
+            if (!this.useDataPoint(xp, previousXp, nextXp)) {
+              return
+            }
+
             dataPoints.push({
               x: moment(record.created_at).toDate(),
               y: record.skills[skill].experience,
@@ -190,6 +220,18 @@
        */
       UCFirst(str) {
         return str.charAt(0).toUpperCase() + str.slice(1)
+      },
+      useDataPoint(xp, previousXp, nextXp) {
+        if (!this.optimiseDataPoints) {
+          return true
+        }
+        if (previousXp === null || previousXp !== xp) {
+          return true
+        }
+        if (nextXp === null || nextXp !== xp) {
+          return true
+        }
+        return false
       },
     },
     components: {
