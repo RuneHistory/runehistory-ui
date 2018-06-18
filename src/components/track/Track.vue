@@ -47,7 +47,7 @@
       <v-flex xs12>
         <v-card>
           <v-toolbar color="primary" dark>
-            <v-toolbar-title>{{ UCFirst(skill) }} XP</v-toolbar-title>
+            <v-toolbar-title>{{ UCFirst(skill) }}</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-container fluid>
@@ -68,12 +68,34 @@
                 ></v-checkbox>
               </v-flex>
 
-              <v-flex xs12 v-if="!skillChartData">
+              <v-flex xs12 v-if="!skillXpChartData">
                 <v-progress-linear :indeterminate="true"></v-progress-linear>
               </v-flex>
 
-              <v-flex xs12 v-if="skillChartData">
-                <time-series-chart :chart-data="skillChartData"></time-series-chart>
+              <v-flex xs12 v-if="skillXpChartData">
+                <time-series-chart :chart-data="skillXpChartData"
+                                   :title="this.UCFirst(this.skill) + ' XP'"
+                                   label="XP"></time-series-chart>
+              </v-flex>
+
+              <v-flex xs12 v-if="!skillLevelChartData">
+                <v-progress-linear :indeterminate="true"></v-progress-linear>
+              </v-flex>
+
+              <v-flex xs12 v-if="skillLevelChartData">
+                <time-series-chart :chart-data="skillLevelChartData"
+                                   :title="this.UCFirst(this.skill) + ' level'"
+                                   label="Level"></time-series-chart>
+              </v-flex>
+
+              <v-flex xs12 v-if="!skillRankChartData">
+                <v-progress-linear :indeterminate="true"></v-progress-linear>
+              </v-flex>
+
+              <v-flex xs12 v-if="skillRankChartData">
+                <time-series-chart :chart-data="skillRankChartData"
+                                   :title="this.UCFirst(this.skill) + ' rank'"
+                                   label="Rank"></time-series-chart>
               </v-flex>
 
             </v-layout>
@@ -120,56 +142,14 @@
           value: skill,
         }))
       },
-      skillChartData() {
-        const dataPoints = []
-
-        if (!this.highScores) {
-          return null
-        }
-
-        this.highScores.forEach((record, i) => {
-          let previousRecord = null
-          let nextRecord = null
-
-          if (i > 0) {
-            previousRecord = this.highScores[i - 1]
-          }
-          if (i < this.highScores.length - 1) {
-            nextRecord = this.highScores[i + 1]
-          }
-          Object.keys(record.skills).forEach((skill) => {
-            const xp = record.skills[skill].experience
-            let previousXp = null
-            let nextXp = null
-            if (skill !== this.skill) {
-              return
-            }
-            if (previousRecord) {
-              previousXp = previousRecord.skills[skill].experience
-            }
-            if (nextRecord) {
-              nextXp = nextRecord.skills[skill].experience
-            }
-            if (!this.useDataPoint(xp, previousXp, nextXp)) {
-              return
-            }
-
-            dataPoints.push({
-              x: moment(record.created_at).toDate(),
-              y: record.skills[skill].experience,
-            })
-          })
-        })
-
-        return {
-          datasets: [{
-            label: this.UCFirst(this.skill),
-            backgroundColor: '#889df8',
-            borderColor: '#889df8',
-            fill: false,
-            data: dataPoints,
-          }],
-        }
+      skillXpChartData() {
+        return this.skillDataPoints('experience')
+      },
+      skillLevelChartData() {
+        return this.skillDataPoints('level')
+      },
+      skillRankChartData() {
+        return this.skillDataPoints('rank')
       },
     },
     watch: {
@@ -221,17 +201,68 @@
       UCFirst(str) {
         return str.charAt(0).toUpperCase() + str.slice(1)
       },
-      useDataPoint(xp, previousXp, nextXp) {
+      useDataPoint(current, prev, next) {
         if (!this.optimiseDataPoints) {
           return true
         }
-        if (previousXp === null || previousXp !== xp) {
+        if (prev === null || prev !== current) {
           return true
         }
-        if (nextXp === null || nextXp !== xp) {
+        if (next === null || next !== current) {
           return true
         }
         return false
+      },
+      skillDataPoints(item) {
+        const dataPoints = []
+
+        if (!this.highScores) {
+          return null
+        }
+
+        this.highScores.forEach((record, i) => {
+          let previousRecord = null
+          let nextRecord = null
+
+          if (i > 0) {
+            previousRecord = this.highScores[i - 1]
+          }
+          if (i < this.highScores.length - 1) {
+            nextRecord = this.highScores[i + 1]
+          }
+          Object.keys(record.skills).forEach((skill) => {
+            const current = record.skills[skill][item]
+            let prev = null
+            let next = null
+            if (skill !== this.skill) {
+              return
+            }
+            if (previousRecord) {
+              prev = previousRecord.skills[skill][item]
+            }
+            if (nextRecord) {
+              next = nextRecord.skills[skill][item]
+            }
+            if (!this.useDataPoint(current, prev, next)) {
+              return
+            }
+
+            dataPoints.push({
+              x: moment(record.created_at).toDate(),
+              y: record.skills[skill][item],
+            })
+          })
+        })
+
+        return {
+          datasets: [{
+            label: this.UCFirst(this.skill),
+            backgroundColor: '#889df8',
+            borderColor: '#889df8',
+            fill: false,
+            data: dataPoints,
+          }],
+        }
       },
     },
     components: {

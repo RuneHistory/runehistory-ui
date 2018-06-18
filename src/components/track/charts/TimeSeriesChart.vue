@@ -25,7 +25,7 @@
   export default {
     extends: Line,
     mixins: [mixins.reactiveProp],
-    props: ['title', 'legend'],
+    props: ['title', 'legend', 'label'],
     data() {
       return {
         options: {
@@ -63,7 +63,7 @@
               display: true,
               scaleLabel: {
                 display: true,
-                labelString: 'XP',
+                labelString: this.label,
               },
             }],
           },
