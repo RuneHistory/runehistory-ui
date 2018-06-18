@@ -37,14 +37,10 @@
 </template>
 
 <script>
+  import rh from '../../client'
   import { slugify } from '../../util'
 
-  const Client = require('runehistoryjs')
-
   export default {
-    created() {
-      this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
-    },
     data: () => ({
       valid: true,
       submitted: false,
@@ -79,7 +75,7 @@
         this.$refs.form.reset()
       },
       getAccount() {
-        return this.rh.accounts().getAccount(this.slug).catch((err) => {
+        return rh.accounts().getAccount(this.slug).catch((err) => {
           if (err.response.status === 404) {
             return null
           }
@@ -87,7 +83,7 @@
         })
       },
       createAccount() {
-        return this.rh.accounts().createAccount(this.username)
+        return rh.accounts().createAccount(this.username)
       },
     },
   }

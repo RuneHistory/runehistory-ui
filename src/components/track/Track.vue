@@ -53,13 +53,12 @@
 </template>
 
 <script>
-  import Client from 'runehistoryjs'
+  import rh from '../../client'
   import SkillOverTime from './SkillOverTime'
   import CurrentStats from './CurrentStats'
 
   export default {
     created() {
-      this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
       this.loadAccount(this.slug)
     },
     data() {
@@ -82,7 +81,7 @@
     },
     methods: {
       loadAccount(slug) {
-        return this.rh.accounts().getAccount(slug)
+        return rh.accounts().getAccount(slug)
           .then((account) => {
             this.account = account
             return account

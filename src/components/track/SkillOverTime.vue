@@ -62,15 +62,12 @@
 
 <script>
   import moment from 'moment'
-  import Client from 'runehistoryjs'
+  import rh from '../../client'
   import TimeSeriesChart from './charts/TimeSeriesChart'
   import { skills } from '../../skills'
 
   export default {
     props: ['account'],
-    created() {
-      this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
-    },
     data() {
       return {
         highScores: null,
@@ -112,7 +109,7 @@
     },
     methods: {
       loadHighScores(slug, skill) {
-        return this.rh.accounts().highScores(slug).getHighScores(null, null, [skill])
+        return rh.accounts().highScores(slug).getHighScores(null, null, [skill])
           .then((highScores) => {
             this.highScores = highScores
             return highScores

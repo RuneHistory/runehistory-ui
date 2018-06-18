@@ -42,15 +42,12 @@
 </template>
 
 <script>
-  import Client from 'runehistoryjs'
+  import rh from '../../client'
   import PieChart from './charts/PieChart'
   import { skills, colours } from '../../skills'
 
   export default {
     props: ['account'],
-    created() {
-      this.rh = new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
-    },
     data() {
       return {
         highScore: null,
@@ -89,7 +86,7 @@
     },
     methods: {
       loadHighScore(slug) {
-        return this.rh.accounts().highScores(slug).getLatestHighScore()
+        return rh.accounts().highScores(slug).getLatestHighScore()
           .then((highScore) => {
             this.highScore = highScore
             return highScore
