@@ -64,6 +64,7 @@
   import moment from 'moment'
   import Client from 'runehistoryjs'
   import TimeSeriesChart from './charts/TimeSeriesChart'
+  import { skills } from '../../skills'
 
   export default {
     props: ['account'],
@@ -73,11 +74,7 @@
     data() {
       return {
         highScores: null,
-        skills: ['overall', 'attack', 'defence', 'strength', 'hitpoints',
-          'ranged', 'prayer', 'magic', 'cooking', 'woodcutting',
-          'fletching', 'fishing', 'firemaking', 'crafting', 'smithing',
-          'mining', 'herblore', 'agility', 'theiving', 'slayer',
-          'farming', 'hunter'],
+        skills,
         skill: 'overall',
         optimiseDataPoints: true,
       }

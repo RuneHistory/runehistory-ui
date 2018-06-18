@@ -11,7 +11,7 @@
             <v-progress-linear :indeterminate="true"></v-progress-linear>
           </v-flex>
 
-          <v-flex xs12 v-if="highScore">
+          <v-flex xs12 md4 v-if="highScore">
             <table>
               <tr>
                 <th>Skill</th>
@@ -28,6 +28,12 @@
             </table>
           </v-flex>
 
+          <v-flex xs12 md8 v-if="highScore">
+            <pie-chart :chart-data="pieChartData"
+                       :title="'XP distribution'"
+                       label="XP"></pie-chart>
+          </v-flex>
+
         </v-layout>
 
       </v-container>
@@ -37,6 +43,8 @@
 
 <script>
   import Client from 'runehistoryjs'
+  import PieChart from './charts/PieChart'
+  import { skills, colours } from '../../skills'
 
   export default {
     props: ['account'],
@@ -46,14 +54,30 @@
     data() {
       return {
         highScore: null,
-        skills: ['overall', 'attack', 'defence', 'strength', 'hitpoints',
-          'ranged', 'prayer', 'magic', 'cooking', 'woodcutting',
-          'fletching', 'fishing', 'firemaking', 'crafting', 'smithing',
-          'mining', 'herblore', 'agility', 'theiving', 'slayer',
-          'farming', 'hunter'],
+        skills,
       }
     },
     computed: {
+      pieChartSkills() {
+        return skills.reduce((all, skill) => {
+          if (skill !== 'overall') {
+            all.push(skill)
+          }
+          return all
+        }, [])
+      },
+      pieChartData() {
+        return {
+          labels: this.pieChartSkills.map(this.UCFirst),
+          datasets: [
+            {
+              data: this.pieChartSkills.map(skill => this.highScore.skills[skill].experience),
+              backgroundColor: this.pieChartSkills.map(skill => colours[skill]),
+              borderWidth: 1,
+            },
+          ],
+        }
+      },
     },
     watch: {
       account(account) {
@@ -83,6 +107,7 @@
       },
     },
     components: {
+      PieChart,
     },
   }
 </script>
