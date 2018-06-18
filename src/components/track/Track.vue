@@ -44,6 +44,8 @@
         </v-card>
       </v-flex>
 
+      <current-stats :account="account"></current-stats>
+
       <skill-over-time :account="account"></skill-over-time>
 
     </v-layout>
@@ -53,6 +55,7 @@
 <script>
   import Client from 'runehistoryjs'
   import SkillOverTime from './SkillOverTime'
+  import CurrentStats from './CurrentStats'
 
   export default {
     created() {
@@ -98,6 +101,7 @@
     },
     components: {
       SkillOverTime,
+      CurrentStats,
     },
   }
 </script>
