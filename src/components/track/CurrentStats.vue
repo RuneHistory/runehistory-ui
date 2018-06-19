@@ -11,24 +11,22 @@
             <v-progress-linear :indeterminate="true"></v-progress-linear>
           </v-flex>
 
-          <v-flex xs12 md4 v-if="highScore">
-            <table>
-              <tr>
-                <th>Skill</th>
-                <th>Level</th>
-                <th>Rank</th>
-                <th>Experience</th>
-              </tr>
-              <tr v-for="skill in skills">
-                <td><img :src="'/static/img/skills/' + skill + '.gif'" /> {{ UCFirst(skill) }}</td>
-                <td>{{ highScore.skills[skill].level }}</td>
-                <td>{{ highScore.skills[skill].rank }}</td>
-                <td>{{ highScore.skills[skill].experience }}</td>
-              </tr>
-            </table>
+          <v-flex xs12 md6 v-if="highScore">
+            <v-data-table
+              :headers="tableData.headers"
+              :items="tableData.skills"
+              hide-actions
+            >
+              <template slot="items" slot-scope="props">
+                <td><img :src="props.item.icon" /> {{ props.item.name }}</td>
+                <td class="text-xs-right">{{ props.item.level }}</td>
+                <td class="text-xs-right">{{ props.item.rank }}</td>
+                <td class="text-xs-right">{{ props.item.experience }}</td>
+              </template>
+            </v-data-table>
           </v-flex>
 
-          <v-flex xs12 md8 v-if="highScore">
+          <v-flex xs12 md6 v-if="highScore">
             <pie-chart :chart-data="pieChartData"
                        :title="'XP distribution'"
                        label="XP"></pie-chart>
@@ -48,6 +46,11 @@
 
   export default {
     props: ['account'],
+    created() {
+      if (this.account) {
+        this.loadHighScore(this.account.slug)
+      }
+    },
     data() {
       return {
         highScore: null,
@@ -73,6 +76,23 @@
               borderWidth: 1,
             },
           ],
+        }
+      },
+      tableData() {
+        const headers = ['Skill', 'Level', 'Rank', 'XP'].map(item => ({
+          text: item,
+          sortable: false,
+        }))
+        const formattedSkills = this.skills.map(skill => ({
+          name: this.UCFirst(skill),
+          level: this.highScore.skills[skill].level,
+          rank: this.highScore.skills[skill].rank,
+          experience: this.highScore.skills[skill].experience,
+          icon: `/static/img/skills/${skill}.gif`,
+        }))
+        return {
+          headers,
+          skills: formattedSkills,
         }
       },
     },
