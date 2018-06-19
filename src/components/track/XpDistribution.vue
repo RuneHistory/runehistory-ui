@@ -7,18 +7,11 @@
       </v-flex>
 
       <v-flex xs12 v-if="highScore">
-        <v-data-table
-          :headers="tableData.headers"
-          :items="tableData.skills"
-          hide-actions
-        >
-          <template slot="items" slot-scope="props">
-            <td><img :src="props.item.icon" /> {{ props.item.name }}</td>
-            <td class="text-xs-right">{{ props.item.level }}</td>
-            <td class="text-xs-right">{{ props.item.rank }}</td>
-            <td class="text-xs-right">{{ props.item.experience }}</td>
-          </template>
-        </v-data-table>
+        <pie-chart :chart-data="pieChartData"
+                   :title="'XP distribution'"
+                   label="XP"
+                   :legend="true"
+        ></pie-chart>
       </v-flex>
 
     </v-layout>
@@ -27,7 +20,8 @@
 
 <script>
   import rh from '../../client'
-  import { skills } from '../../skills'
+  import PieChart from './charts/PieChart'
+  import { skills, colours } from '../../skills'
   import { upperFirst } from '../../util'
 
   export default {
@@ -44,21 +38,24 @@
       }
     },
     computed: {
-      tableData() {
-        const headers = ['Skill', 'Level', 'Rank', 'XP'].map(item => ({
-          text: item,
-          sortable: false,
-        }))
-        const formattedSkills = this.skills.map(skill => ({
-          name: upperFirst(skill),
-          level: this.highScore.skills[skill].level,
-          rank: this.highScore.skills[skill].rank,
-          experience: this.highScore.skills[skill].experience,
-          icon: `/static/img/skills/${skill}.gif`,
-        }))
+      pieChartSkills() {
+        return skills.reduce((all, skill) => {
+          if (skill !== 'overall') {
+            all.push(skill)
+          }
+          return all
+        }, [])
+      },
+      pieChartData() {
         return {
-          headers,
-          skills: formattedSkills,
+          labels: this.pieChartSkills.map(upperFirst),
+          datasets: [
+            {
+              data: this.pieChartSkills.map(skill => this.highScore.skills[skill].experience),
+              backgroundColor: this.pieChartSkills.map(skill => colours[skill]),
+              borderWidth: 1,
+            },
+          ],
         }
       },
     },
@@ -84,6 +81,7 @@
       },
     },
     components: {
+      PieChart,
     },
   }
 </script>

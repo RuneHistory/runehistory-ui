@@ -44,7 +44,9 @@
         </v-card>
       </v-flex>
 
-      <current-stats :account="account"></current-stats>
+      <v-flex xs12>
+        <current-stats :account="account"></current-stats>
+      </v-flex>
 
       <skill-over-time :account="account"></skill-over-time>
 
@@ -55,7 +57,7 @@
 <script>
   import rh from '../../client'
   import SkillOverTime from './SkillOverTime'
-  import CurrentStats from './CurrentStats'
+  import CurrentStats from './cards/CurrentStats'
 
   export default {
     created() {
