@@ -2,53 +2,17 @@
   <v-container fluid grid-list-lg>
     <v-layout flex wrap>
 
-      <v-flex xs12 v-if="!account">
-        <v-card>
-          <v-toolbar color="primary" dark>
-            <v-toolbar-title>Loading Account</v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          <v-container fluid>
-            <v-layout>
-              <v-flex xs12>
-                <v-progress-linear :indeterminate="true"></v-progress-linear>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
-      </v-flex>
-
       <v-flex xs12 v-if="account">
-        <v-card>
-          <v-toolbar color="primary" dark>
-            <v-toolbar-title>{{ account.nickname }}</v-toolbar-title>
-            <v-spacer></v-spacer>
-          </v-toolbar>
-          <v-container fluid>
-            <v-layout v-if="account">
-              <v-flex xs12>
-                <p>
-                  We started tracking {{ account.nickname }} at {{ account.created_at }}, and the
-                  most recent run was at
-                  {{ account.last_run_at || '[never]' }}. {{ account.nickname }} hasn't been updated
-                  for {{
-                  account.runs_unchanged }}
-                  runs.
-                </p>
-                <p v-if="!account.last_run_at">
-                  {{ account.nickname }} will be tracked in the next scheduled run.
-                </p>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
+        <account-tracking-info :account="account"></account-tracking-info>
       </v-flex>
 
       <v-flex xs12>
         <current-stats :account="account"></current-stats>
       </v-flex>
 
-      <skill-over-time :account="account"></skill-over-time>
+      <v-flex xs12>
+        <skill-over-time :account="account"></skill-over-time>
+      </v-flex>
 
     </v-layout>
   </v-container>
@@ -56,8 +20,9 @@
 
 <script>
   import rh from '../../client'
-  import SkillOverTime from './SkillOverTime'
+  import SkillOverTime from './cards/SkillOverTime'
   import CurrentStats from './cards/CurrentStats'
+  import AccountTrackingInfo from './cards/AccountTrackingInfo'
 
   export default {
     created() {
@@ -101,6 +66,7 @@
       },
     },
     components: {
+      AccountTrackingInfo,
       SkillOverTime,
       CurrentStats,
     },

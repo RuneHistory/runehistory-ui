@@ -1,70 +1,68 @@
 <template>
-  <v-flex xs12>
-    <v-card>
-      <v-toolbar color="primary" dark>
-        <v-toolbar-title>Skill over time</v-toolbar-title>
-        <v-spacer></v-spacer>
-      </v-toolbar>
-      <v-container fluid>
-        <v-layout wrap>
-          <v-flex xs12 sm6>
-            <v-select
-              :items="skillsSelect"
-              v-model="skill"
-              label="Skill"
-              single-line
-            ></v-select>
-          </v-flex>
+  <v-card>
+    <v-toolbar color="primary" dark>
+      <v-toolbar-title>Skill over time</v-toolbar-title>
+      <v-spacer></v-spacer>
+    </v-toolbar>
+    <v-container fluid>
+      <v-layout wrap>
+        <v-flex xs12 sm6>
+          <v-select
+            :items="skillsSelect"
+            v-model="skill"
+            label="Skill"
+            single-line
+          ></v-select>
+        </v-flex>
 
-          <v-flex xs12 sm6>
-            <v-checkbox
-              label="Optimise"
-              v-model="optimiseDataPoints"
-            ></v-checkbox>
-          </v-flex>
+        <v-flex xs12 sm6>
+          <v-checkbox
+            label="Optimise"
+            v-model="optimiseDataPoints"
+          ></v-checkbox>
+        </v-flex>
 
-          <v-flex xs12 v-if="!skillXpChartData">
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-          </v-flex>
+        <v-flex xs12 v-if="!skillXpChartData">
+          <v-progress-linear :indeterminate="true"></v-progress-linear>
+        </v-flex>
 
-          <v-flex xs12 v-if="skillXpChartData">
-            <time-series-chart :chart-data="skillXpChartData"
-                               :title="this.UCFirst(this.skill) + ' XP'"
-                               label="XP"></time-series-chart>
-          </v-flex>
+        <v-flex xs12 v-if="skillXpChartData">
+          <time-series-chart :chart-data="skillXpChartData"
+                             :title="this.UCFirst(this.skill) + ' XP'"
+                             label="XP"></time-series-chart>
+        </v-flex>
 
-          <v-flex xs12 v-if="!skillLevelChartData">
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-          </v-flex>
+        <v-flex xs12 v-if="!skillLevelChartData">
+          <v-progress-linear :indeterminate="true"></v-progress-linear>
+        </v-flex>
 
-          <v-flex xs12 v-if="skillLevelChartData">
-            <time-series-chart :chart-data="skillLevelChartData"
-                               :title="this.UCFirst(this.skill) + ' level'"
-                               label="Level"></time-series-chart>
-          </v-flex>
+        <v-flex xs12 v-if="skillLevelChartData">
+          <time-series-chart :chart-data="skillLevelChartData"
+                             :title="this.UCFirst(this.skill) + ' level'"
+                             label="Level"></time-series-chart>
+        </v-flex>
 
-          <v-flex xs12 v-if="!skillRankChartData">
-            <v-progress-linear :indeterminate="true"></v-progress-linear>
-          </v-flex>
+        <v-flex xs12 v-if="!skillRankChartData">
+          <v-progress-linear :indeterminate="true"></v-progress-linear>
+        </v-flex>
 
-          <v-flex xs12 v-if="skillRankChartData">
-            <time-series-chart :chart-data="skillRankChartData"
-                               :title="this.UCFirst(this.skill) + ' rank'"
-                               label="Rank"></time-series-chart>
-          </v-flex>
+        <v-flex xs12 v-if="skillRankChartData">
+          <time-series-chart :chart-data="skillRankChartData"
+                             :title="this.UCFirst(this.skill) + ' rank'"
+                             label="Rank"></time-series-chart>
+        </v-flex>
 
-        </v-layout>
+      </v-layout>
 
-      </v-container>
-    </v-card>
-  </v-flex>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
   import moment from 'moment'
-  import rh from '../../client'
-  import TimeSeriesChart from './charts/TimeSeriesChart'
-  import { skills } from '../../skills'
+  import rh from '../../../client'
+  import TimeSeriesChart from '../charts/TimeSeriesChart'
+  import { skills } from '../../../skills'
 
   export default {
     props: ['account'],
