@@ -28,7 +28,7 @@
 
         <v-flex xs12 v-if="skillXpChartData">
           <time-series-chart :chart-data="skillXpChartData"
-                             :title="this.UCFirst(this.skill) + ' XP'"
+                             :title="upperFirst(this.skill) + ' XP'"
                              label="XP"></time-series-chart>
         </v-flex>
 
@@ -38,7 +38,7 @@
 
         <v-flex xs12 v-if="skillLevelChartData">
           <time-series-chart :chart-data="skillLevelChartData"
-                             :title="this.UCFirst(this.skill) + ' level'"
+                             :title="upperFirst(this.skill) + ' level'"
                              label="Level"></time-series-chart>
         </v-flex>
 
@@ -48,7 +48,7 @@
 
         <v-flex xs12 v-if="skillRankChartData">
           <time-series-chart :chart-data="skillRankChartData"
-                             :title="this.UCFirst(this.skill) + ' rank'"
+                             :title="upperFirst(this.skill) + ' rank'"
                              label="Rank"></time-series-chart>
         </v-flex>
 
@@ -63,6 +63,7 @@
   import rh from '../../../client'
   import TimeSeriesChart from '../charts/TimeSeriesChart'
   import { skills } from '../../../skills'
+  import { upperFirst } from '../../../util'
 
   export default {
     props: ['account'],
@@ -77,7 +78,7 @@
     computed: {
       skillsSelect() {
         return this.skills.map(skill => ({
-          text: this.UCFirst(skill),
+          text: upperFirst(skill),
           value: skill,
         }))
       },
@@ -106,6 +107,7 @@
       },
     },
     methods: {
+      upperFirst,
       loadHighScores(slug, skill) {
         return rh.accounts().highScores(slug).getHighScores(null, null, [skill])
           .then((highScores) => {
@@ -116,12 +118,6 @@
             this.highScores = null
             throw err
           })
-      },
-      /**
-       * @return {string}
-       */
-      UCFirst(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
       },
       useDataPoint(current, prev, next) {
         if (!this.optimiseDataPoints) {
@@ -178,7 +174,7 @@
 
         return {
           datasets: [{
-            label: this.UCFirst(this.skill),
+            label: upperFirst(this.skill),
             backgroundColor: '#889df8',
             borderColor: '#889df8',
             fill: false,

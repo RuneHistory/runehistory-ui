@@ -58,12 +58,6 @@
             throw err
           })
       },
-      /**
-       * @return {string}
-       */
-      UCFirst(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1)
-      },
     },
     components: {
       AccountTrackingInfo,
