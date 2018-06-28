@@ -66,8 +66,8 @@
               return this.createAccount()
             }
             return account
-          }).then(() => {
-            this.$router.push({ name: 'track', params: { slug: this.slug } })
+          }).then((account) => {
+            this.$router.push({ name: 'track', params: { slug: account.slug } })
           })
         }
       },

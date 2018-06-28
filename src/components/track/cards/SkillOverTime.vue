@@ -5,7 +5,13 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-container fluid>
-      <v-layout wrap>
+      <v-layout v-if="pending">
+        <v-flex xs12>
+          <v-progress-linear :indeterminate="true"></v-progress-linear>
+        </v-flex>
+      </v-layout>
+
+      <v-layout wrap v-if="!pending && account">
         <v-flex xs12 sm6>
           <v-select
             :items="skillsSelect"
@@ -66,7 +72,7 @@
   import { upperFirst } from '../../../util'
 
   export default {
-    props: ['account'],
+    props: ['account', 'pending'],
     data() {
       return {
         highScores: null,
