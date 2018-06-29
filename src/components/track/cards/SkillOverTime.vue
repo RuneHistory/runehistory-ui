@@ -72,7 +72,6 @@
   import { upperFirst } from '../../../util'
 
   export default {
-    props: ['account', 'pending'],
     data() {
       return {
         highScores: null,
@@ -82,6 +81,12 @@
       }
     },
     computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+      pending() {
+        return this.$store.state.getAccountPending
+      },
       skillsSelect() {
         return this.skills.map(skill => ({
           text: upperFirst(skill),

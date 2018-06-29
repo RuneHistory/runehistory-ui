@@ -13,10 +13,10 @@
 
       <v-layout wrap v-if="!pending && account">
         <v-flex xs12 md6>
-          <current-stats xs1 :account="account"></current-stats>
+          <current-stats xs1></current-stats>
         </v-flex>
         <v-flex xs12 md6>
-          <xp-distribution :account="account"></xp-distribution>
+          <xp-distribution></xp-distribution>
         </v-flex>
       </v-layout>
     </v-container>
@@ -28,7 +28,14 @@
   import XpDistribution from '../XpDistribution'
 
   export default {
-    props: ['account', 'pending'],
+    computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+      pending() {
+        return this.$store.state.getAccountPending
+      },
+    },
     components: {
       CurrentStats,
       XpDistribution,

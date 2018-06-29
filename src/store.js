@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
-import { delay } from './util'
 import rh from './client'
 import router from './router'
 import { createMutation, doAsync } from './async-util'
@@ -33,7 +32,7 @@ const store = new Vuex.Store({
         return
       }
       doAsync(s, {
-        promise: rh.accounts().getAccount(s.state.route.params.slug).then(delay(3000)),
+        promise: rh.accounts().getAccount(s.state.route.params.slug).then(),
         mutationTypes: types.GET_ACCOUNT,
       })
     },

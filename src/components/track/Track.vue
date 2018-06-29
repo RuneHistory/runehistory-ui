@@ -2,22 +2,15 @@
   <v-container fluid grid-list-lg>
     <v-layout flex wrap>
       <v-flex xs12>
-        <account-tracking-info :account="$store.state.getAccountData"
-                               :pending="$store.state.getAccountPending">
-        </account-tracking-info>
+        <account-tracking-info></account-tracking-info>
       </v-flex>
 
       <v-flex xs12>
-        <current-stats :account="$store.state.getAccountData"
-                       :pending="$store.state.getAccountPending">
-
-        </current-stats>
+        <current-stats></current-stats>
       </v-flex>
 
       <v-flex xs12>
-        <skill-over-time :account="$store.state.getAccountData"
-                         :pending="$store.state.getAccountPending">
-        </skill-over-time>
+        <skill-over-time></skill-over-time>
       </v-flex>
 
     </v-layout>

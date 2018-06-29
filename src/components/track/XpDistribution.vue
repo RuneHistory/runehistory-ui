@@ -2,11 +2,11 @@
   <v-container fluid>
     <v-layout wrap>
 
-      <v-flex xs12 v-if="!highScore">
+      <v-flex xs12 v-if="pending">
         <v-progress-linear :indeterminate="true"></v-progress-linear>
       </v-flex>
 
-      <v-flex xs12 v-if="highScore">
+      <v-flex xs12 v-if="!pending && highScore">
         <pie-chart :chart-data="pieChartData"
                    :title="'XP distribution'"
                    label="XP"
@@ -25,7 +25,6 @@
   import { upperFirst } from '../../util'
 
   export default {
-    props: ['account'],
     created() {
       if (this.account) {
         this.loadHighScore(this.account.slug)
@@ -38,6 +37,12 @@
       }
     },
     computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+      pending() {
+        return this.$store.state.getAccountPending
+      },
       pieChartSkills() {
         return skills.reduce((all, skill) => {
           if (skill !== 'overall') {

@@ -2,11 +2,11 @@
   <v-container fluid>
     <v-layout wrap>
 
-      <v-flex xs12 v-if="!highScore">
+      <v-flex xs12 v-if="pending">
         <v-progress-linear :indeterminate="true"></v-progress-linear>
       </v-flex>
 
-      <v-flex xs12 v-if="highScore">
+      <v-flex xs12 v-if="!pending && highScore">
         <v-data-table
           :headers="tableData.headers"
           :items="tableData.skills"
@@ -31,7 +31,6 @@
   import { upperFirst } from '../../util'
 
   export default {
-    props: ['account'],
     created() {
       if (this.account) {
         this.loadHighScore(this.account.slug)
@@ -44,6 +43,12 @@
       }
     },
     computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+      pending() {
+        return this.$store.state.getAccountPending
+      },
       tableData() {
         const headers = ['Skill', 'Level', 'Rank', 'XP'].map(item => ({
           text: item,

@@ -30,6 +30,13 @@
 
 <script>
   export default {
-    props: ['account', 'pending'],
+    computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+      pending() {
+        return this.$store.state.getAccountPending
+      },
+    },
   }
 </script>
