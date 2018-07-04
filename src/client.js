@@ -1,8 +1,8 @@
 import Client from 'runehistoryjs'
 
-const user = process.env.API_USER
-const password = process.env.API_PASSWORD
-const secret = process.env.API_SECRET
-const host = process.env.API_HOST
+const user = window.app_config.api_user
+const password = window.app_config.api_password
+const secret = window.app_config.api_secret
+const host = window.app_config.api_host
 
 export default new Client(user, password, secret, host)
