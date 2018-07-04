@@ -1,3 +1,8 @@
 import Client from 'runehistoryjs'
 
-export default new Client('rh-cli', 'test', 'test_secret', 'http://127.0.0.1:5000')
+const user = process.env.API_USER
+const password = process.env.API_PASSWORD
+const secret = process.env.API_SECRET
+const host = process.env.API_HOST
+
+export default new Client(user, password, secret, host)
