@@ -7,7 +7,7 @@
             <v-toolbar-title>Track User</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <v-form ref="form" v-model="valid" @submit="submit" xs12>
+          <v-form ref="form" v-model="valid" @submit.prevent="submit" xs12>
             <v-container>
               <v-layout>
                 <v-flex xs12>
