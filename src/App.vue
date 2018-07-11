@@ -3,7 +3,6 @@
     <v-navigation-drawer
       persistent
       v-model="drawer"
-      enable-resize-watcher
       fixed
       app
     >
@@ -46,7 +45,7 @@
   export default {
     data() {
       return {
-        drawer: true,
+        drawer: false,
         navigation: [{
           icon: 'dashboard',
           title: 'Dashboard',
