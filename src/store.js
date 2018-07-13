@@ -4,6 +4,7 @@ import { sync } from 'vuex-router-sync'
 import rh from './client'
 import router from './router'
 import { createMutation, doAsync } from './async-util'
+import { numberWithCommas } from './util'
 
 Vue.use(Vuex)
 
@@ -33,7 +34,7 @@ const store = new Vuex.Store({
     // GET_ACCOUNT_COUNT
     [types.GET_ACCOUNT_COUNT.SUCCESS](state, data) {
       Vue.set(state, types.GET_ACCOUNT_COUNT.loadingKey, false)
-      Vue.set(state, types.GET_ACCOUNT_COUNT.stateKey, data)
+      Vue.set(state, types.GET_ACCOUNT_COUNT.stateKey, numberWithCommas(data))
     },
     [types.GET_ACCOUNT_COUNT.PENDING](state) {
       Vue.set(state, types.GET_ACCOUNT_COUNT.loadingKey, true)
@@ -47,7 +48,7 @@ const store = new Vuex.Store({
     // GET_HIGH_SCORE_COUNT
     [types.GET_HIGH_SCORE_COUNT.SUCCESS](state, data) {
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.loadingKey, false)
-      Vue.set(state, types.GET_HIGH_SCORE_COUNT.stateKey, data)
+      Vue.set(state, types.GET_HIGH_SCORE_COUNT.stateKey, numberWithCommas(data))
     },
     [types.GET_HIGH_SCORE_COUNT.PENDING](state) {
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.loadingKey, true)
