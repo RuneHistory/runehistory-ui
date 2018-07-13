@@ -128,6 +128,9 @@
 
 <script>
   export default {
+    metaInfo: {
+      title: 'Dashboard',
+    },
     created() {
       this.$store.dispatch('getAccountCount')
       this.$store.dispatch('getHighScoreCount')

@@ -60,5 +60,9 @@
       }
     },
     name: 'App',
+    metaInfo: {
+      title: 'RuneHistory',
+      titleTemplate: '%s | RuneHistory',
+    },
   }
 </script>

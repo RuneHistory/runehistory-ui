@@ -54,6 +54,9 @@
   import { slugify } from '../../util'
 
   export default {
+    metaInfo: {
+      title: 'Search',
+    },
     data: () => ({
       pending: false,
       valid: true,
