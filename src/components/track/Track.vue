@@ -26,6 +26,20 @@
     created() {
       this.$store.dispatch('getAccount')
     },
+    computed: {
+      account() {
+        return this.$store.state.getAccountData
+      },
+    },
+    metaInfo() {
+      let title = 'Track'
+      if (this.account) {
+        title = `Track ${this.account.nickname}`
+      }
+      return {
+        title,
+      }
+    },
     components: {
       AccountTrackingInfo,
       SkillOverTime,

@@ -3,11 +3,16 @@
 import Vue from 'vue'
 import 'vuetify/dist/vuetify.min.css'
 import Vuetify from 'vuetify'
+import Meta from 'vue-meta'
 import App from './App'
 import router from './router'
 import store from './store'
 
 Vue.use(Vuetify)
+Vue.use(Meta, {
+  keyName: 'metaInfo',
+  attribute: 'data-vue-meta',
+})
 
 Vue.config.productionTip = false
 
