@@ -47,6 +47,7 @@
           scales: {
             xAxes: [{
               type: 'time',
+              distribution: 'linear',
               display: true,
               scaleLabel: {
                 display: true,
@@ -57,6 +58,10 @@
                   fontStyle: 'bold',
                   fontColor: '#FF0000',
                 },
+              },
+              time: {
+                minUnit: 'day',
+                tooltipFormat: 'Do MMM YYYY - h:mma',
               },
             }],
             yAxes: [{
