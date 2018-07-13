@@ -7,7 +7,7 @@
             <v-toolbar-title>Track User</v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
-          <v-form ref="form" v-model="valid" @submit.prevent="submit" xs12>
+          <v-form ref="form" v-model="valid" @submit.prevent="submit" :disabled="pending" xs12>
             <v-container>
               <v-layout>
                 <v-flex xs12>
@@ -17,15 +17,28 @@
                     :counter="12"
                     label="Username"
                     required
+                    :disabled="pending"
                   ></v-text-field>
 
                   <v-btn
-                    :disabled="!valid"
+                    :disabled="!valid || pending"
                     type="submit"
                   >
                     Track
                   </v-btn>
-                  <v-btn @click="clear">Clear</v-btn>
+                  <v-btn
+                    @click="clear"
+                    :disabled="pending">
+                    Clear
+                  </v-btn>
+
+                  <v-progress-circular
+                    v-if="pending"
+                    indeterminate
+                    color="primary"
+                    :size="20"
+                    :width="3"
+                  ></v-progress-circular>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -38,10 +51,11 @@
 
 <script>
   import rh from '../../client'
-  import { slugify } from '../../util'
+  import { slugify, delay } from '../../util'
 
   export default {
     data: () => ({
+      pending: false,
       valid: true,
       submitted: false,
       exists: true,
@@ -61,14 +75,20 @@
     methods: {
       submit() {
         if (this.$refs.form.validate()) {
-          this.getAccount().then((account) => {
-            if (!account) {
-              return this.createAccount()
-            }
-            return account
-          }).then((account) => {
-            this.$router.push({ name: 'track', params: { slug: account.slug } })
-          })
+          this.pending = true
+          this.getAccount()
+            .then((account) => {
+              if (!account) {
+                return this.createAccount()
+              }
+              return account
+            })
+            .then((account) => {
+              this.$router.push({ name: 'track', params: { slug: account.slug } })
+            })
+            .finally(() => {
+              this.pending = false
+            })
         }
       },
       clear() {

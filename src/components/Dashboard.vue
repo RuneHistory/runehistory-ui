@@ -37,9 +37,34 @@
               <v-flex xs12 sm4>
                 <v-card color="blue-grey darken-2" class="white--text">
                   <v-card-title primary-title>
-                    <div class="headline">{{ accountCount }} players tracked</div>
-                    <div>We are actively tracking {{ accountCount }} players XP up to every 10
-                      minutes.</div>
+                    <div class="headline">
+                      <v-progress-circular
+                        v-if="accountCountPending"
+                        indeterminate
+                        color="white"
+                        :size="20"
+                        :width="3"
+                      ></v-progress-circular>
+                      <span v-if="!accountCountPending">
+                        {{ accountCount }}
+                      </span>
+                      players tracked
+                    </div>
+                    <div>
+                      We are actively tracking
+                      <v-progress-circular
+                        v-if="accountCountPending"
+                        indeterminate
+                        color="white"
+                        :size="15"
+                        :width="2"
+                      ></v-progress-circular>
+                      <span v-if="!accountCountPending">
+                        {{ accountCount }}
+                      </span>
+                      players XP up to every 10
+                      minutes.
+                    </div>
                   </v-card-title>
                   <v-card-actions>
                     <v-btn flat dark :to="{ name: 'search' }">Track your account</v-btn>
@@ -49,10 +74,33 @@
               <v-flex xs12 sm4 lg4>
                 <v-card color="cyan darken-2" class="white--text">
                   <v-card-title primary-title>
-                    <div class="headline">{{ highScoreCount }} data points</div>
-                    <div>Since RuneHistory launched in 2018, we have gathered {{ highScoreCount
-                      }} data points
-                      .</div>
+                    <div class="headline">
+                      <v-progress-circular
+                        v-if="highScoreCountPending"
+                        indeterminate
+                        color="white"
+                        :size="20"
+                        :width="3"
+                      ></v-progress-circular>
+                      <span v-if="!highScoreCountPending">
+                        {{ highScoreCount }}
+                      </span>
+                      data points
+                    </div>
+                    <div>
+                      Since RuneHistory launched in 2018, we have gathered
+                      <v-progress-circular
+                        v-if="highScoreCountPending"
+                        indeterminate
+                        color="white"
+                        :size="15"
+                        :width="2"
+                      ></v-progress-circular>
+                      <span v-if="!highScoreCountPending">
+                        {{ highScoreCount }}
+                      </span>
+                      data points.
+                    </div>
                   </v-card-title>
                   <v-card-actions>
                     <v-btn flat dark :to="{ name: 'search' }">Track your account</v-btn>
@@ -79,41 +127,23 @@
 </template>
 
 <script>
-  import rh from '../client'
-
   export default {
     created() {
-      this.loadAccountCount()
-      this.loadHighScoreCount()
+      this.$store.dispatch('getAccountCount')
+      this.$store.dispatch('getHighScoreCount')
     },
-    data() {
-      return {
-        accountCount: null,
-        highScoreCount: null,
-      }
-    },
-    methods: {
-      loadAccountCount() {
-        return rh.stats().count_accounts()
-          .then((count) => {
-            this.accountCount = count
-            return count
-          })
-          .catch((err) => {
-            this.accountCount = null
-            throw err
-          })
+    computed: {
+      accountCount() {
+        return this.$store.state.getAccountCountData
       },
-      loadHighScoreCount() {
-        return rh.stats().count_highscores()
-          .then((count) => {
-            this.highScoreCount = count
-            return count
-          })
-          .catch((err) => {
-            this.highScoreCount = null
-            throw err
-          })
+      accountCountPending() {
+        return this.$store.state.getAccountCountPending
+      },
+      highScoreCount() {
+        return this.$store.state.getHighScoreCountData
+      },
+      highScoreCountPending() {
+        return this.$store.state.getHighScoreCountPending
       },
     },
   }
