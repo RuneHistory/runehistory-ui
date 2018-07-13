@@ -11,6 +11,15 @@
             <v-container>
               <v-layout>
                 <v-flex xs12>
+                  <v-alert
+                    :value="error"
+                    color="error"
+                    icon="warning"
+                    outline
+                  >
+                    Something went wrong
+                  </v-alert>
+
                   <v-text-field
                     v-model="username"
                     :rules="usernameRules"
@@ -59,6 +68,7 @@
     },
     data: () => ({
       pending: false,
+      error: false,
       valid: true,
       submitted: false,
       exists: true,
@@ -79,6 +89,7 @@
       submit() {
         if (this.$refs.form.validate()) {
           this.pending = true
+          this.error = false
           this.getAccount()
             .then((account) => {
               if (!account) {
@@ -89,12 +100,16 @@
             .then((account) => {
               this.$router.push({ name: 'track', params: { slug: account.slug } })
             })
+            .catch(() => {
+              this.error = true
+            })
             .finally(() => {
               this.pending = false
             })
         }
       },
       clear() {
+        this.error = false
         this.$refs.form.reset()
       },
       getAccount() {

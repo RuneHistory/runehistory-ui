@@ -16,4 +16,5 @@ export const createMutation = type => ({
   PENDING: `${type}_PENDING`,
   loadingKey: _.camelCase(`${type}_PENDING`),
   stateKey: _.camelCase(`${type}_DATA`),
+  errorKey: _.camelCase(`${type}_ERROR`),
 })

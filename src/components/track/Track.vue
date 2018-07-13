@@ -1,6 +1,19 @@
 <template>
   <v-container fluid grid-list-lg>
-    <v-layout flex wrap>
+    <v-layout v-if="error">
+      <v-flex xs12>
+        <v-alert
+          :value="error"
+          color="error"
+          icon="warning"
+          outline
+        >
+          Something went wrong
+        </v-alert>
+      </v-flex>
+    </v-layout>
+
+    <v-layout flex wrap v-if="!error">
       <v-flex xs12>
         <account-tracking-info></account-tracking-info>
       </v-flex>
@@ -29,6 +42,9 @@
     computed: {
       account() {
         return this.$store.state.getAccountData
+      },
+      error() {
+        return this.$store.state.getAccountError
       },
     },
     metaInfo() {

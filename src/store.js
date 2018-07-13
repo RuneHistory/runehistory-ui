@@ -23,10 +23,12 @@ const store = new Vuex.Store({
     },
     [types.GET_ACCOUNT.PENDING](state) {
       Vue.set(state, types.GET_ACCOUNT.loadingKey, true)
+      Vue.set(state, types.GET_ACCOUNT.errorKey, false)
     },
     [types.GET_ACCOUNT.FAILURE](state) {
       Vue.set(state, types.GET_ACCOUNT.loadingKey, false)
       Vue.set(state, types.GET_ACCOUNT.stateKey, null)
+      Vue.set(state, types.GET_ACCOUNT.errorKey, true)
     },
     // GET_ACCOUNT_COUNT
     [types.GET_ACCOUNT_COUNT.SUCCESS](state, data) {
@@ -35,10 +37,12 @@ const store = new Vuex.Store({
     },
     [types.GET_ACCOUNT_COUNT.PENDING](state) {
       Vue.set(state, types.GET_ACCOUNT_COUNT.loadingKey, true)
+      Vue.set(state, types.GET_ACCOUNT_COUNT.errorKey, false)
     },
     [types.GET_ACCOUNT_COUNT.FAILURE](state) {
       Vue.set(state, types.GET_ACCOUNT_COUNT.loadingKey, false)
       Vue.set(state, types.GET_ACCOUNT_COUNT.stateKey, null)
+      Vue.set(state, types.GET_ACCOUNT_COUNT.errorKey, true)
     },
     // GET_HIGH_SCORE_COUNT
     [types.GET_HIGH_SCORE_COUNT.SUCCESS](state, data) {
@@ -47,10 +51,12 @@ const store = new Vuex.Store({
     },
     [types.GET_HIGH_SCORE_COUNT.PENDING](state) {
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.loadingKey, true)
+      Vue.set(state, types.GET_HIGH_SCORE_COUNT.errorKey, false)
     },
     [types.GET_HIGH_SCORE_COUNT.FAILURE](state) {
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.loadingKey, false)
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.stateKey, null)
+      Vue.set(state, types.GET_HIGH_SCORE_COUNT.errorKey, true)
     },
   },
   actions: {

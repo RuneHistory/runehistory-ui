@@ -5,6 +5,19 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-container fluid>
+      <v-layout v-if="error">
+        <v-flex xs12>
+          <v-alert
+            :value="error"
+            color="error"
+            icon="warning"
+            outline
+          >
+            Oops... Something went wrong
+          </v-alert>
+        </v-flex>
+      </v-layout>
+
       <v-layout v-if="pending">
         <v-flex xs12>
           <v-progress-linear :indeterminate="true"></v-progress-linear>
@@ -28,7 +41,7 @@
           ></v-checkbox>
         </v-flex>
 
-        <v-flex xs12 v-if="!skillXpChartData">
+        <v-flex xs12 v-if="!skillXpChartData && !highScoresError">
           <v-progress-linear :indeterminate="true"></v-progress-linear>
         </v-flex>
 
@@ -38,7 +51,7 @@
                              label="XP"></time-series-chart>
         </v-flex>
 
-        <v-flex xs12 v-if="!skillLevelChartData">
+        <v-flex xs12 v-if="!skillLevelChartData && !highScoresError">
           <v-progress-linear :indeterminate="true"></v-progress-linear>
         </v-flex>
 
@@ -48,7 +61,7 @@
                              label="Level"></time-series-chart>
         </v-flex>
 
-        <v-flex xs12 v-if="!skillRankChartData">
+        <v-flex xs12 v-if="!skillRankChartData && !highScoresError">
           <v-progress-linear :indeterminate="true"></v-progress-linear>
         </v-flex>
 
@@ -75,6 +88,7 @@
     data() {
       return {
         highScores: null,
+        highScoresError: false,
         skills,
         skill: 'overall',
         optimiseDataPoints: true,
@@ -86,6 +100,9 @@
       },
       pending() {
         return this.$store.state.getAccountPending
+      },
+      error() {
+        return this.$store.state.getAccountError || this.highScoresError
       },
       skillsSelect() {
         return this.skills.map(skill => ({
@@ -120,14 +137,15 @@
     methods: {
       upperFirst,
       loadHighScores(slug, skill) {
+        this.highScoresError = false
         return rh.accounts().highScores(slug).getHighScores(null, null, [skill])
           .then((highScores) => {
             this.highScores = highScores
             return highScores
           })
-          .catch((err) => {
+          .catch(() => {
             this.highScores = null
-            throw err
+            this.highScoresError = true
           })
       },
       useDataPoint(current, prev, next) {

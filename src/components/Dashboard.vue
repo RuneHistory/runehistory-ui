@@ -35,7 +35,15 @@
           <v-container grid-list-lg fluid>
             <v-layout wrap>
               <v-flex xs12 sm4>
-                <v-card color="blue-grey darken-2" class="white--text">
+                <v-alert
+                  :value="accountCountError"
+                  color="error"
+                  icon="warning"
+                  outline
+                >
+                  Oops... Something went wrong
+                </v-alert>
+                <v-card color="blue-grey darken-2" class="white--text" v-if="!accountCountError">
                   <v-card-title primary-title>
                     <div class="headline">
                       <v-progress-circular
@@ -72,7 +80,15 @@
                 </v-card>
               </v-flex>
               <v-flex xs12 sm4 lg4>
-                <v-card color="cyan darken-2" class="white--text">
+                <v-alert
+                  :value="highScoreCountError"
+                  color="error"
+                  icon="warning"
+                  outline
+                >
+                  Oops... Something went wrong
+                </v-alert>
+                <v-card color="cyan darken-2" class="white--text" v-if="!highScoreCountError">
                   <v-card-title primary-title>
                     <div class="headline">
                       <v-progress-circular
@@ -142,11 +158,17 @@
       accountCountPending() {
         return this.$store.state.getAccountCountPending
       },
+      accountCountError() {
+        return this.$store.state.getAccountCountError
+      },
       highScoreCount() {
         return this.$store.state.getHighScoreCountData
       },
       highScoreCountPending() {
         return this.$store.state.getHighScoreCountPending
+      },
+      highScoreCountError() {
+        return this.$store.state.getHighScoreCountError
       },
     },
   }
