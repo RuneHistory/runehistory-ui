@@ -17,3 +17,10 @@ export function delay(ms) {
 export function upperFirst(str) {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
+
+/**
+ * @return {string}
+ */
+export function numberWithCommas(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}

@@ -21,6 +21,7 @@
   //   }],
   // }
   import { Line, mixins } from 'vue-chartjs'
+  import { numberWithCommas } from '../../../util'
 
   export default {
     extends: Line,
@@ -73,12 +74,21 @@
               ticks: {
                 callback(value) {
                   if (!(value % 1)) {
-                    return Number(value).toFixed(0)
+                    return numberWithCommas(Number(value).toFixed(0))
                   }
                   return null
                 },
               },
             }],
+          },
+          tooltips: {
+            callbacks: {
+              label(tooltipItem, data) {
+                const dataset = data.datasets[tooltipItem.datasetIndex]
+                const item = dataset.data[tooltipItem.index]
+                return `${dataset.label}: ${numberWithCommas(item.y)}`
+              },
+            },
           },
         },
       }

@@ -28,7 +28,7 @@
 <script>
   import rh from '../../client'
   import { skills } from '../../skills'
-  import { upperFirst } from '../../util'
+  import { upperFirst, numberWithCommas } from '../../util'
 
   export default {
     created() {
@@ -56,9 +56,9 @@
         }))
         const formattedSkills = this.skills.map(skill => ({
           name: upperFirst(skill),
-          level: this.highScore.skills[skill].level,
-          rank: this.highScore.skills[skill].rank,
-          experience: this.highScore.skills[skill].experience,
+          level: numberWithCommas(this.highScore.skills[skill].level),
+          rank: numberWithCommas(this.highScore.skills[skill].rank),
+          experience: numberWithCommas(this.highScore.skills[skill].experience),
           icon: `/static/img/skills/${skill}.gif`,
         }))
         return {
