@@ -51,7 +51,7 @@
 
 <script>
   import rh from '../../client'
-  import { slugify, delay } from '../../util'
+  import { slugify } from '../../util'
 
   export default {
     data: () => ({
