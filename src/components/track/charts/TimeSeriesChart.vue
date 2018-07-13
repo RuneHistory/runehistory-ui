@@ -70,6 +70,14 @@
                 display: true,
                 labelString: this.label,
               },
+              ticks: {
+                callback(value) {
+                  if (!(value % 1)) {
+                    return Number(value).toFixed(0)
+                  }
+                  return null
+                },
+              },
             }],
           },
         },
