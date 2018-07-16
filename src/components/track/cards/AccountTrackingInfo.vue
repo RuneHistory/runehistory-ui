@@ -15,11 +15,11 @@
       <v-layout v-if="!pending && account">
         <v-flex xs12>
           <p>
-            We started tracking {{ account.nickname }} at {{ account.created_at }}, and the
-            most recent run was at {{ account.last_run_at || '[never]' }}.
+            We started tracking {{ account.nickname }} at {{ accountCreatedAt }}, and the
+            most recent run was at {{ accountLastRunAt || '[never]' }}.
             {{ account.nickname }} hasn't been updated for {{ account.runs_unchanged }} runs.
           </p>
-          <p v-if="!account.last_run_at">
+          <p v-if="!accountLastRunAt">
             {{ account.nickname }} will be tracked in the next scheduled run.
           </p>
         </v-flex>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+  import { formatDate } from '../../../util'
+
   export default {
     computed: {
       account() {
@@ -36,6 +38,15 @@
       },
       pending() {
         return this.$store.state.getAccountPending
+      },
+      accountCreatedAt() {
+        return formatDate(this.account.created_at)
+      },
+      accountLastRunAt() {
+        if (!this.account.last_run_at) {
+          return null
+        }
+        return formatDate(this.account.last_run_at)
       },
     },
   }

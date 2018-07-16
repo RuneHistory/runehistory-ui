@@ -1,4 +1,5 @@
 const slugifyOrig = require('slugify')
+const moment = require('moment')
 
 export function slugify(s) {
   return slugifyOrig(s, {
@@ -23,4 +24,13 @@ export function upperFirst(str) {
  */
 export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+export const dateFormat = 'Do MMM YYYY h:mma'
+
+/**
+ * @return {string}
+ */
+export function formatDate(x) {
+  return moment(x).format(dateFormat)
 }

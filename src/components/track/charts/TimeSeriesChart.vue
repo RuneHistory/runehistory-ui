@@ -21,7 +21,7 @@
   //   }],
   // }
   import { Line, mixins } from 'vue-chartjs'
-  import { numberWithCommas } from '../../../util'
+  import { numberWithCommas, dateFormat } from '../../../util'
 
   export default {
     extends: Line,
@@ -62,7 +62,7 @@
               },
               time: {
                 minUnit: 'day',
-                tooltipFormat: 'Do MMM YYYY - h:mma',
+                tooltipFormat: dateFormat,
               },
             }],
             yAxes: [{
