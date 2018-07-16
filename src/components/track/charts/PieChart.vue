@@ -24,6 +24,7 @@
   //   ]
   // }
   import { Pie, mixins } from 'vue-chartjs'
+  import { numberWithCommas } from '../../../util'
 
   export default {
     extends: Pie,
@@ -41,6 +42,16 @@
           title: {
             display: typeof this.title !== 'undefined',
             text: this.title || null,
+          },
+          tooltips: {
+            callbacks: {
+              label(tooltipItem, data) {
+                const dataset = data.datasets[tooltipItem.datasetIndex]
+                const item = dataset.data[tooltipItem.index]
+                const label = data.labels[tooltipItem.index]
+                return `${label}: ${numberWithCommas(item)}`
+              },
+            },
           },
         },
       }
