@@ -154,6 +154,7 @@
     methods: {
       upperFirst,
       loadHighScoresFromState() {
+        this.highScores = null
         if (!this.highScoreSourceData.account) {
           return
         }
