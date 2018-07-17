@@ -28,17 +28,17 @@
         <v-flex xs12 sm6>
           <v-select
             :items="skillsSelect"
-            v-model="skill"
             label="Skill"
-            single-line
+            v-model="skill"
           ></v-select>
         </v-flex>
 
         <v-flex xs12 sm6>
-          <v-checkbox
-            label="Optimise"
-            v-model="optimiseDataPoints"
-          ></v-checkbox>
+          <v-select
+            :items="formTimePeriods"
+            label="Time period"
+            v-model="timePeriod"
+          ></v-select>
         </v-flex>
 
         <v-flex xs12 v-if="!skillXpChartData && !highScoresError">
@@ -85,6 +85,10 @@
   import { upperFirst } from '../../../util'
 
   export default {
+    created() {
+      this.$store.dispatch('setDateRange')
+      this.loadHighScoresFromState()
+    },
     data() {
       return {
         highScores: null,
@@ -92,6 +96,7 @@
         skills,
         skill: 'overall',
         optimiseDataPoints: true,
+        timePeriods: ['hour', 'day', 'week', 'month', 'year'],
       }
     },
     computed: {
@@ -119,26 +124,54 @@
       skillRankChartData() {
         return this.skillDataPoints('rank')
       },
+      dateRange() {
+        return this.$store.state.dateRange
+      },
+      highScoreSourceData() {
+        return {
+          account: this.account,
+          dateRange: this.dateRange,
+          skill: this.skill,
+        }
+      },
+      formTimePeriods() {
+        return this.timePeriods.map(period => ({ value: period, text: upperFirst(period) }))
+      },
+      timePeriod: {
+        get() {
+          return this.$store.state.timePeriod
+        },
+        set(timePeriod) {
+          this.$store.dispatch('setTimePeriod', timePeriod)
+        },
+      },
     },
     watch: {
-      account(account) {
-        if (!account) {
-          return
-        }
-        this.loadHighScores(account.slug, this.skill)
-      },
-      skill(skill) {
-        if (!this.account) {
-          return
-        }
-        this.loadHighScores(this.account.slug, skill)
+      highScoreSourceData() {
+        this.loadHighScoresFromState()
       },
     },
     methods: {
       upperFirst,
-      loadHighScores(slug, skill) {
+      loadHighScoresFromState() {
+        if (!this.highScoreSourceData.account) {
+          return
+        }
+        if (!this.highScoreSourceData.dateRange) {
+          return
+        }
+        if (!this.highScoreSourceData.skill) {
+          return
+        }
+        this.loadHighScores(
+          this.highScoreSourceData.account.slug,
+          this.highScoreSourceData.skill,
+          this.highScoreSourceData.dateRange,
+        )
+      },
+      loadHighScores(slug, skill, dateRange) {
         this.highScoresError = false
-        return rh.accounts().highScores(slug).getHighScores(null, null, [skill])
+        return rh.accounts().highScores(slug).getHighScores(dateRange.from, dateRange.to, [skill])
           .then((highScores) => {
             this.highScores = highScores
             return highScores

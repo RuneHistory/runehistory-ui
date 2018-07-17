@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { sync } from 'vuex-router-sync'
+import moment from 'moment'
 import rh from './client'
 import router from './router'
 import { createMutation, doAsync } from './async-util'
@@ -15,7 +16,10 @@ const types = {
 }
 
 const store = new Vuex.Store({
-  state: {},
+  state: {
+    timePeriod: 'week',
+    dateRange: null,
+  },
   mutations: {
     // GET_ACCOUNT
     [types.GET_ACCOUNT.SUCCESS](state, data) {
@@ -59,6 +63,14 @@ const store = new Vuex.Store({
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.stateKey, null)
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.errorKey, true)
     },
+    // Date range
+    timePeriod(state, period) {
+      Vue.set(state, 'timePeriod', period)
+      this.dispatch('setDateRange')
+    },
+    dateRange(state, range) {
+      Vue.set(state, 'dateRange', range)
+    },
   },
   actions: {
     getAccount(s) {
@@ -88,8 +100,16 @@ const store = new Vuex.Store({
         mutationTypes: types.GET_HIGH_SCORE_COUNT,
       })
     },
+    setTimePeriod(s, timePeriod) {
+      s.commit('timePeriod', timePeriod)
+    },
+    setDateRange(s) {
+      s.commit('dateRange', {
+        from: moment.utc().subtract(1, s.state.timePeriod).format(),
+        to: moment.utc().format(),
+      })
+    },
   },
-  getters: {},
 })
 
 sync(store, router)
