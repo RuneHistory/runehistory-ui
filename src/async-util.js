@@ -1,12 +1,16 @@
 import _ from 'lodash'
 
-export const doAsync = (store, { promise, mutationTypes }) => {
+export const doAsync = (store, { promise, mutationTypes, throwErr }) => {
   store.commit(mutationTypes.PENDING)
-  promise.then((response) => {
+  return promise.then((response) => {
     store.commit(mutationTypes.SUCCESS, response)
+    return response
   })
   .catch((err) => {
     store.commit(mutationTypes.FAILURE, err)
+    if (throwErr) {
+      throw err
+    }
   })
 }
 

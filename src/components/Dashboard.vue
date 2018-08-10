@@ -148,27 +148,27 @@
       title: 'Dashboard',
     },
     created() {
-      this.$store.dispatch('getAccountCount')
-      this.$store.dispatch('getHighScoreCount')
+      this.$store.dispatch('dashboard/getAccountCount')
+      this.$store.dispatch('dashboard/getHighScoreCount')
     },
     computed: {
       accountCount() {
-        return this.$store.state.getAccountCountData
+        return this.$store.state.dashboard.getAccountCountData
       },
       accountCountPending() {
-        return this.$store.state.getAccountCountPending
+        return this.$store.state.dashboard.getAccountCountPending
       },
       accountCountError() {
-        return this.$store.state.getAccountCountError
+        return this.$store.state.dashboard.getAccountCountError
       },
       highScoreCount() {
-        return this.$store.state.getHighScoreCountData
+        return this.$store.state.dashboard.getHighScoreCountData
       },
       highScoreCountPending() {
-        return this.$store.state.getHighScoreCountPending
+        return this.$store.state.dashboard.getHighScoreCountPending
       },
       highScoreCountError() {
-        return this.$store.state.getHighScoreCountError
+        return this.$store.state.dashboard.getHighScoreCountError
       },
     },
   }
