@@ -75,7 +75,6 @@
   import SkillOverTime from './tabs/SkillOverTime'
   import CurrentStats from './tabs/CurrentStats'
   import AccountTrackingInfo from './tabs/AccountTrackingInfo'
-  import AccountForm from './AccountForm'
   import { slugify } from '../../util'
 
   export default {
@@ -164,7 +163,6 @@
       AccountTrackingInfo,
       SkillOverTime,
       CurrentStats,
-      AccountForm,
     },
   }
 </script>
