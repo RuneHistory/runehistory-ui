@@ -21,7 +21,7 @@
 <script>
   import rh from '../../client'
   import PieChart from './charts/PieChart'
-  import { skills, colours } from '../../skills'
+  import { skills, colours } from '../../app/skills'
   import { upperFirst } from '../../util'
 
   export default {

@@ -23,7 +23,7 @@ export default new Router({
       component: Search,
     },
     {
-      path: '/track/:slug',
+      path: '/track/:slug/:tab?',
       name: 'track',
       component: Track,
       props: true,

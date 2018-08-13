@@ -1,29 +1,70 @@
 <template>
   <v-container fluid grid-list-lg>
-    <v-layout v-if="error">
+    <v-layout wrap>
       <v-flex xs12>
-        <v-alert
-          :value="error"
-          color="error"
-          icon="warning"
-          outline
+        <v-toolbar
+          color="primary"
+          dark
+          tabs
+          class="track-toolbar"
         >
-          Something went wrong
-        </v-alert>
-      </v-flex>
-    </v-layout>
+          <v-toolbar-title>{{ nickname }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-btn icon :to="{ name: 'search' }">
+            <v-icon>search</v-icon>
+          </v-btn>
 
-    <v-layout flex wrap v-if="!error">
-      <v-flex xs12>
-        <account-tracking-info></account-tracking-info>
+          <template slot="extension">
+            <v-tabs
+              v-model="selectedTabIndex"
+              centered
+              color="transparent"
+              slider-color="white"
+              grow
+              show-arrows
+              @input="changedTab"
+            >
+              <v-tab
+                v-for="tab in tabItems"
+                :key="tab.name"
+              >
+                {{ tab.name }}
+              </v-tab>
+            </v-tabs>
+          </template>
+
+        </v-toolbar>
       </v-flex>
 
-      <v-flex xs12>
-        <current-stats></current-stats>
+      <v-flex xs12 v-if="accountError">
+        <v-card>
+          <v-container fluid>
+            <v-layout>
+              <v-flex xs12>
+                <v-alert
+                  :value="accountError"
+                  color="error"
+                  icon="warning"
+                  outline
+                >
+                  Oops... Something went wrong
+                </v-alert>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
       </v-flex>
 
-      <v-flex xs12>
-        <skill-over-time></skill-over-time>
+      <v-flex xs12 v-if="!accountError">
+        <v-tabs-items v-model="selectedTabIndex" touchless>
+          <v-tab-item
+            v-for="tab in tabItems"
+            :key="tab.name"
+            :lazy="true"
+          >
+            <component :is="tab.component"></component>
+          </v-tab-item>
+        </v-tabs-items>
       </v-flex>
 
     </v-layout>
@@ -31,26 +72,88 @@
 </template>
 
 <script>
-  import SkillOverTime from './cards/SkillOverTime'
-  import CurrentStats from './cards/CurrentStats'
-  import AccountTrackingInfo from './cards/AccountTrackingInfo'
+  import SkillOverTime from './tabs/SkillOverTime'
+  import CurrentStats from './tabs/CurrentStats'
+  import AccountTrackingInfo from './tabs/AccountTrackingInfo'
+  import { slugify } from '../../util'
 
   export default {
-    created() {
-      this.$store.dispatch('getAccount')
+    data() {
+      return {
+        tabItems: [
+          {
+            name: 'Tracking Info',
+            component: AccountTrackingInfo,
+            slug: 'tracking-info',
+          },
+          {
+            name: 'Current Stats',
+            component: CurrentStats,
+            slug: 'current-stats',
+          },
+          {
+            name: 'Skill Over Time',
+            component: SkillOverTime,
+            slug: 'skill-over-time',
+          },
+        ],
+        selectedTabIndex: null,
+        currentTab: null,
+      }
+    },
+    methods: {
+      changedTab(tabIndex) {
+        const selectedTab = this.tabItems[tabIndex]
+        this.currentTab = selectedTab
+        this.$router.push({ name: 'track', params: { slug: this.$route.params.slug, tab: slugify(selectedTab.slug) } })
+      },
+      tabIndexFromSlug(slug) {
+        for (let i = 0; i < this.tabItems.length; i += 1) {
+          if (this.tabItems[i].slug === slug) {
+            return i
+          }
+        }
+        return null
+      },
     },
     computed: {
       account() {
-        return this.$store.state.getAccountData
+        return this.$store.state.track.getAccountData
       },
-      error() {
-        return this.$store.state.getAccountError
+      accountError() {
+        return this.$store.state.track.getAccountError
+      },
+      accountPending() {
+        return this.$store.state.track.getAccountPending
+      },
+      nickname() {
+        if (this.account) {
+          return this.account.nickname
+        }
+        return this.$route.params.slug
+      },
+      currentTabName() {
+        if (this.currentTab) {
+          return this.currentTab.name
+        }
+        return null
       },
     },
+    created() {
+      if (this.$route.params.tab) {
+        const index = this.tabIndexFromSlug(this.$route.params.tab)
+        if (index === null) {
+          this.selectedTabIndex = 0
+        } else {
+          this.selectedTabIndex = index
+        }
+      }
+      this.$store.dispatch('track/getAccount', this.$route.params.slug)
+    },
     metaInfo() {
-      let title = 'Track'
-      if (this.account) {
-        title = `Track ${this.account.nickname}`
+      let title = `Track ${this.nickname}`
+      if (this.currentTabName) {
+        title += ` | ${this.currentTabName}`
       }
       return {
         title,

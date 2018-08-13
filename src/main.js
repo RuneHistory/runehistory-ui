@@ -6,7 +6,7 @@ import Vuetify from 'vuetify'
 import Meta from 'vue-meta'
 import App from './App'
 import router from './router'
-import store from './store'
+import store from './store/main'
 
 Vue.use(Vuetify)
 Vue.use(Meta, {

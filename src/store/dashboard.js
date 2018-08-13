@@ -1,40 +1,17 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
-import { sync } from 'vuex-router-sync'
-import moment from 'moment'
-import rh from './client'
-import router from './router'
-import { createMutation, doAsync } from './async-util'
-import { numberWithCommas } from './util'
+import rh from '../client'
+import { createMutation, doAsync } from '../async-util'
+import { numberWithCommas } from '../util'
 
-Vue.use(Vuex)
 
 const types = {
-  GET_ACCOUNT: createMutation('GET_ACCOUNT'),
   GET_ACCOUNT_COUNT: createMutation('GET_ACCOUNT_COUNT'),
   GET_HIGH_SCORE_COUNT: createMutation('GET_HIGH_SCORE_COUNT'),
 }
 
-const store = new Vuex.Store({
-  state: {
-    timePeriod: 'week',
-    dateRange: null,
-  },
+const store = {
+  namespaced: true,
   mutations: {
-    // GET_ACCOUNT
-    [types.GET_ACCOUNT.SUCCESS](state, data) {
-      Vue.set(state, types.GET_ACCOUNT.loadingKey, false)
-      Vue.set(state, types.GET_ACCOUNT.stateKey, data)
-    },
-    [types.GET_ACCOUNT.PENDING](state) {
-      Vue.set(state, types.GET_ACCOUNT.loadingKey, true)
-      Vue.set(state, types.GET_ACCOUNT.errorKey, false)
-    },
-    [types.GET_ACCOUNT.FAILURE](state) {
-      Vue.set(state, types.GET_ACCOUNT.loadingKey, false)
-      Vue.set(state, types.GET_ACCOUNT.stateKey, null)
-      Vue.set(state, types.GET_ACCOUNT.errorKey, true)
-    },
     // GET_ACCOUNT_COUNT
     [types.GET_ACCOUNT_COUNT.SUCCESS](state, data) {
       Vue.set(state, types.GET_ACCOUNT_COUNT.loadingKey, false)
@@ -63,25 +40,8 @@ const store = new Vuex.Store({
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.stateKey, null)
       Vue.set(state, types.GET_HIGH_SCORE_COUNT.errorKey, true)
     },
-    // Date range
-    timePeriod(state, period) {
-      Vue.set(state, 'timePeriod', period)
-      this.dispatch('setDateRange')
-    },
-    dateRange(state, range) {
-      Vue.set(state, 'dateRange', range)
-    },
   },
   actions: {
-    getAccount(s) {
-      if (s.state[types.GET_ACCOUNT.loadingKey]) {
-        return
-      }
-      doAsync(s, {
-        promise: rh.accounts().getAccount(s.state.route.params.slug),
-        mutationTypes: types.GET_ACCOUNT,
-      })
-    },
     getAccountCount(s) {
       if (s.state[types.GET_ACCOUNT_COUNT.loadingKey]) {
         return
@@ -100,18 +60,7 @@ const store = new Vuex.Store({
         mutationTypes: types.GET_HIGH_SCORE_COUNT,
       })
     },
-    setTimePeriod(s, timePeriod) {
-      s.commit('timePeriod', timePeriod)
-    },
-    setDateRange(s) {
-      s.commit('dateRange', {
-        from: moment.utc().subtract(1, s.state.timePeriod).format(),
-        to: moment.utc().format(),
-      })
-    },
   },
-})
-
-sync(store, router)
+}
 
 export default store

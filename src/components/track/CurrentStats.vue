@@ -6,7 +6,7 @@
         <v-progress-linear :indeterminate="true"></v-progress-linear>
       </v-flex>
 
-      <v-flex xs12 v-if="!pending && highScore">
+      <v-flex xs12 v-if="!pending && !error && highScore">
         <v-data-table
           :headers="tableData.headers"
           :items="tableData.skills"
@@ -14,9 +14,9 @@
         >
           <template slot="items" slot-scope="props">
             <td><img :src="props.item.icon" /> {{ props.item.name }}</td>
-            <td class="text-xs-right">{{ props.item.level }}</td>
-            <td class="text-xs-right">{{ props.item.rank }}</td>
-            <td class="text-xs-right">{{ props.item.experience }}</td>
+            <td>{{ props.item.level }}</td>
+            <td>{{ props.item.rank }}</td>
+            <td>{{ props.item.experience }}</td>
           </template>
         </v-data-table>
       </v-flex>
@@ -26,28 +26,42 @@
 </template>
 
 <script>
-  import rh from '../../client'
-  import { skills } from '../../skills'
+  import { skills } from '../../app/skills'
   import { upperFirst, numberWithCommas } from '../../util'
 
   export default {
-    created() {
-      if (this.account) {
-        this.loadHighScore(this.account.slug)
-      }
-    },
+    props: ['accountState'],
+
     data() {
       return {
-        highScore: null,
         skills,
       }
     },
+
     computed: {
       account() {
-        return this.$store.state.getAccountData
+        return this.$store.state.track.getAccountData
+      },
+      accountPending() {
+        return this.$store.state.track.getAccountPending
+      },
+      accountError() {
+        return this.$store.state.track.getAccountError
+      },
+      highScore() {
+        return this.$store.state.track.latestHighScore.getLatestHighScoreData
+      },
+      highScorePending() {
+        return this.$store.state.track.latestHighScore.getLatestHighScorePending
+      },
+      highScoreError() {
+        return this.$store.state.track.latestHighScore.getLatestHighScoreError
       },
       pending() {
-        return this.$store.state.getAccountPending
+        return this.accountPending || this.highScorePending
+      },
+      error() {
+        return this.accountError || this.highScoreError
       },
       tableData() {
         const headers = ['Skill', 'Level', 'Rank', 'XP'].map(item => ({
@@ -67,28 +81,6 @@
         }
       },
     },
-    watch: {
-      account(account) {
-        if (!account) {
-          return
-        }
-        this.loadHighScore(account.slug)
-      },
-    },
-    methods: {
-      loadHighScore(slug) {
-        return rh.accounts().highScores(slug).getLatestHighScore()
-          .then((highScore) => {
-            this.highScore = highScore
-            return highScore
-          })
-          .catch((err) => {
-            this.highScore = null
-            throw err
-          })
-      },
-    },
-    components: {
-    },
+
   }
 </script>
